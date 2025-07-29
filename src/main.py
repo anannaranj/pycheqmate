@@ -33,8 +33,13 @@ class Board():
         self.C()
 
     def isoccupied(self, pos):
-        if 0 <= pos[::-1][0] and pos[::-1][0] < 8 and 0 <= pos[::-1][1] and pos[::-1][1] < 8:
-            if self.cmap[pos[::-1]] == None:
+        if (
+            0 <= pos[::-1][0] and
+            pos[::-1][0] < 8 and
+            0 <= pos[::-1][1] and
+            pos[::-1][1] < 8
+        ):
+            if self.cmap[pos[::-1]] is None:
                 return False
             else:
                 return True
