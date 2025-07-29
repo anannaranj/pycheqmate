@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from pieces import Rook
+from pieces import Pawn, Rook
 
 
 class Board():
@@ -21,6 +21,8 @@ class Board():
         self.cmap[self.cmap == "."] = None
         self.cmap[self.cmap == "R"] = Rook(True)
         self.cmap[self.cmap == "r"] = Rook(False)
+        self.cmap[self.cmap == "P"] = Pawn(True)
+        self.cmap[self.cmap == "p"] = Pawn(False)
 
     # f= from
     # t= to
@@ -31,8 +33,8 @@ class Board():
         self.C()
 
     def isoccupied(self, pos):
-        if 0 <= pos[0] and pos[0] < 8 and 0 <= pos[1] and pos[1] < 8:
-            if self.cmap[pos] == None:
+        if 0 <= pos[::-1][0] and pos[::-1][0] < 8 and 0 <= pos[::-1][1] and pos[::-1][1] < 8:
+            if self.cmap[pos[::-1]] == None:
                 return False
             else:
                 return True
@@ -48,7 +50,10 @@ class Game():
         self.board = Board(initalstate)
 
 
+# m = Board("./csv/pawns.csv")
+# print(m.listMoves((3, 1)))
+# print(m.listMoves((1, 3)))
+# print(m.listMoves((3, 5)))
+# print(m.listMoves((5, 6)))
 m = Board("./csv/rooks.csv")
-print(m.hmap)
-print(m.cmap)
 print(m.listMoves((1, 1)))

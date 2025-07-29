@@ -19,3 +19,25 @@ class Rook(Piece):
                 ls[dirs.index(dir)].append((x[0] + dir[0], x[1] + dir[1]))
                 x = ls[dirs.index(dir)][-1]
         return sum(ls, [])
+
+
+class Pawn(Piece):
+    def __init__(self, team):
+        Piece.__init__(self, team)
+    # pos is a tuple (x, y)
+
+    def listMoves(self, pos, m):
+        ls = []
+        # white
+        if self.team:
+            if not m.isoccupied((pos[0], pos[1]-1)):
+                ls.append((pos[0], pos[1]-1))
+            if pos[1] == 6 and not m.isoccupied((pos[0], pos[1]-1)) and not m.isoccupied((pos[0], pos[1]-2)):
+                ls.append((pos[0], pos[1]-2))
+        # black
+        else:
+            if not m.isoccupied((pos[0], pos[1]+1)):
+                ls.append((pos[0], pos[1]+1))
+            if pos[1] == 1 and not m.isoccupied((pos[0], pos[1]-1)) and not m.isoccupied((pos[0], pos[1]+2)):
+                ls.append((pos[0], pos[1]+2))
+        return ls
