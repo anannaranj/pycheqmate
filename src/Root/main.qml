@@ -4,8 +4,8 @@ import QtQuick.Layouts
 
 Window {
     id: win
-    width: 800
-    height: 600
+    width: 450
+    height: 450
     visible: true
     title: "Pycheqmate"
     Grid {
@@ -15,7 +15,7 @@ Window {
         }
         columns: 8
         rows: 8
-        spacing: 1
+        spacing: 0
         Repeater {
             id: cells
             model: 64
@@ -23,7 +23,6 @@ Window {
                 required property int index
                 width: 50
                 height: 50
-                border.width: 1
                 // Average Javascript code be like:
                 color: Math.floor(index / 8) & 1 ? index & 1 ? "#ddd" : "#333" : index & 1 ? "#333" : "#ddd"
                 Text {
