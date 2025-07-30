@@ -24,8 +24,10 @@ Window {
                 width: 50
                 height: 50
                 border.width: 1
+                // Average Javascript code be like:
                 color: Math.floor(index / 8) & 1 ? index & 1 ? "#ddd" : "#333" : index & 1 ? "#333" : "#ddd"
                 Text {
+                    // Also average Javascript code be like:
                     text: "ABCDEFGH".split('')[index % 8] + (8 - Math.floor(index / 8))
                     color: Math.floor(index / 8) & 1 ? !(index & 1) ? "#ddd" : "#333" : !(index & 1) ? "#333" : "#ddd"
                     anchors {
