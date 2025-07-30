@@ -8,22 +8,33 @@ Window {
     height: 600
     visible: true
     title: "Pycheqmate"
-    Rectangle {
-        color: "#663399"
-        width: 300
-        height: 200
+    Grid {
         anchors {
             verticalCenter: parent.verticalCenter
             horizontalCenter: parent.horizontalCenter
         }
-        Text {
-            id: name
-            text: "Yet another chess clone!"
-            color: "white"
-            font.pixelSize: 20
-            anchors {
-                verticalCenter: parent.verticalCenter
-                horizontalCenter: parent.horizontalCenter
+        columns: 8
+        rows: 8
+        spacing: 1
+        Repeater {
+            id: cells
+            model: 64
+            Rectangle {
+                required property int index
+                width: 50
+                height: 50
+                border.width: 1
+                color: Math.floor(index / 8) & 1 ? index & 1 ? "#ddd" : "#333" : index & 1 ? "#333" : "#ddd"
+                Text {
+                    text: "ABCDEFGH".split('')[index % 8] + (8 - Math.floor(index / 8))
+                    color: Math.floor(index / 8) & 1 ? !(index & 1) ? "#ddd" : "#333" : !(index & 1) ? "#333" : "#ddd"
+                    anchors {
+                        left: parent.left
+                        leftMargin: 2
+                        top: parent.top
+                        topMargin: 2
+                    }
+                }
             }
         }
     }
