@@ -29,16 +29,23 @@ Window {
                 model: 64
                 Rectangle {
                     required property int index
-                    property string text
+                    property string piece
                     property string cell
                     width: 50
                     height: 50
                     cell: "ABCDEFGH".split('')[index % 8] + (8 - Math.floor(index / 8))
                     // Average Javascript code be like:
                     color: Math.floor(index / 8) & 1 ? index & 1 ? "#ddd" : "#333" : index & 1 ? "#333" : "#ddd"
+                    Image {
+                        source: parent.piece == '.' ? "" : `../../assets/${parent.piece}.png`
+                        width: 50
+                        height: 50
+                        mipmap: true
+                        anchors.centerIn: parent
+                    }
                     Text {
+                        text: `${parent.cell}`
                         // Also average Javascript code be like:
-                        text: `${parent.cell}   ${parent.text}`
                         color: Math.floor(index / 8) & 1 ? !(index & 1) ? "#ddd" : "#333" : !(index & 1) ? "#333" : "#ddd"
                         anchors {
                             left: parent.left
@@ -63,7 +70,9 @@ Window {
     Connections {
         target: bridge
         function onBoardLoaded(map) {
-            map.split("").forEach((el, i) => cells.itemAt(i).text = el);
+            map.split("").forEach((el, i) => {
+                cells.itemAt(i).piece = el;
+            });
         }
     }
 }

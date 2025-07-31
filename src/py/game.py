@@ -33,6 +33,7 @@ class Board():
         self.cmap = np.copy(self.hmap)
         self.C()
 
+    # tuple (x, y)
     def isoccupied(self, pos):
         if (
             0 <= pos[::-1][0] and

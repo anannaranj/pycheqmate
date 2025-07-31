@@ -4,9 +4,10 @@ from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtCore import QUrl, QObject, Signal, Slot
 from pathlib import Path
 from py.game import Game
+from py.utils import notationToPos, posToNotation
 
 
-g = None
+g = [None]
 
 
 class Bridge(QObject):
@@ -15,16 +16,16 @@ class Bridge(QObject):
 
     boardLoaded = Signal(str, arguments=['map'])
 
-    @Slot(str)
-    def handleClick(self, cell):
-        print(cell)
-
     @Slot()
     def loadBoard(self):
-        # g = Game("src/csv/rooks.csv")
-        g = Game()
-        x = "".join(["".join(i) for i in g.board.hmap])
+        g[0] = Game("src/csv/rooks.csv")
+        x = "".join(["".join(i) for i in g[0].board.hmap])
         self.boardLoaded.emit(x)
+
+    @Slot(str)
+    def handleClick(self, cell):
+        pos = notationToPos(cell)
+        print(g[0].board.hmap[pos])
 
 
 if __name__ == "__main__":
@@ -36,6 +37,7 @@ if __name__ == "__main__":
 
     engine.load(QUrl(str(Path(__file__).parent) + "/Root/main.qml"))
 
+    print(g[0])
     if not engine.rootObjects():
         sys.exit(-1)
 
