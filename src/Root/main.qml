@@ -29,13 +29,16 @@ Window {
                 model: 64
                 Rectangle {
                     required property int index
+                    property string text
+                    property string cell
                     width: 50
                     height: 50
+                    cell: "ABCDEFGH".split('')[index % 8] + (8 - Math.floor(index / 8))
                     // Average Javascript code be like:
                     color: Math.floor(index / 8) & 1 ? index & 1 ? "#ddd" : "#333" : index & 1 ? "#333" : "#ddd"
                     Text {
                         // Also average Javascript code be like:
-                        text: "ABCDEFGH".split('')[index % 8] + (8 - Math.floor(index / 8))
+                        text: `${parent.cell}   ${parent.text}`
                         color: Math.floor(index / 8) & 1 ? !(index & 1) ? "#ddd" : "#333" : !(index & 1) ? "#333" : "#ddd"
                         anchors {
                             left: parent.left
@@ -47,11 +50,20 @@ Window {
                     MouseArea {
                         anchors.fill: parent
                         onClicked: {
-                            B.handleClick("ABCDEFGH".split('')[index % 8] + (8 - Math.floor(index / 8)));
+                            bridge.handleClick(parent.cell);
                         }
                     }
                 }
             }
+        }
+    }
+    Component.onCompleted: {
+        bridge.loadBoard();
+    }
+    Connections {
+        target: bridge
+        function onBoardLoaded(map) {
+            map.split("").forEach((el, i) => cells.itemAt(i).text = el);
         }
     }
 }
