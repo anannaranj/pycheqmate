@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from pieces import Pawn, Rook
+from py.pieces import Pawn, Rook
 
 
 class Board():
@@ -11,7 +11,7 @@ class Board():
     def __init__(self, initalstate=None):
         if initalstate is None:
             self.hmap = np.array(pd.read_csv(
-                "../csv/default.csv", header=None))
+                "csv/default.csv", header=None))
         else:
             self.hmap = np.array(pd.read_csv(initalstate, header=None))
         self.cmap = np.copy(self.hmap)
@@ -52,14 +52,14 @@ class Board():
 
 
 class Game():
-    def __init__(self, initalstate):
+    def __init__(self, initalstate=None):
         self.board = Board(initalstate)
 
 
-# m = Board("../csv/pawns.csv")
+# m = Board("csv/pawns.csv")
 # print(m.listMoves((3, 1)))
 # print(m.listMoves((1, 3)))
 # print(m.listMoves((3, 5)))
 # print(m.listMoves((5, 6)))
-m = Board("../csv/rooks.csv")
-print(m.listMoves((1, 1)))
+# m = Board("csv/rooks.csv")
+# print(m.listMoves((1, 1)))

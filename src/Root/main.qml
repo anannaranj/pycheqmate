@@ -44,6 +44,12 @@ Window {
                             topMargin: 2
                         }
                     }
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            B.handleClick("ABCDEFGH".split('')[index % 8] + (8 - Math.floor(index / 8)));
+                        }
+                    }
                 }
             }
         }
