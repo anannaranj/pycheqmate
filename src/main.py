@@ -21,7 +21,8 @@ class Bridge(QObject):
 
     @Slot()
     def loadBoard(self):
-        g = Game("csv/rooks.csv")
+        # g = Game("src/csv/rooks.csv")
+        g = Game()
         x = "".join(["".join(i) for i in g.board.hmap])
         self.boardLoaded.emit(x)
 
