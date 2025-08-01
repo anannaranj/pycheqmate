@@ -16,6 +16,7 @@ class Bridge(QObject):
 
     boardLoaded = Signal(str, arguments=['map'])
     highlight = Signal(list, arguments=["highlights"])
+    captureshighlight = Signal(list, arguments=["captures"])
     highlightreset = Signal()
 
     @Slot()
@@ -29,17 +30,23 @@ class Bridge(QObject):
     def handleClick(self, cell):
         pos = notationToPos(cell)
 
-        if g[0].board.cmap[pos[::-1]] is not None:
+        if g[0].lastMovesList[1] is not None and pos in g[0].lastMovesList[1]:
+            g[0].move(g[0].lastClickedPiece, pos)
+            self.loadBoard()
+            self.highlightreset.emit()
+            g[0].lastMovesList = [None, None]
+        elif g[0].board.cmap[pos[::-1]] is not None:
             moveslist = g[0].board.listMoves(pos)
             g[0].lastMovesList = moveslist
             self.highlightreset.emit()
-            self.highlight.emit([list(v) for v in moveslist])
+            self.highlight.emit([list(v) for v in moveslist[0]])
+            self.captureshighlight.emit([list(v) for v in moveslist[1]])
         else:
-            if g[0].lastMovesList is not None and pos in g[0].lastMovesList:
+            if g[0].lastMovesList[0] is not None and pos in g[0].lastMovesList[0]:
                 g[0].move(g[0].lastClickedPiece, pos)
                 self.loadBoard()
             self.highlightreset.emit()
-            g[0].lastMovesList = None
+            g[0].lastMovesList = [None, None]
 
         g[0].lastClickedPiece = pos
 

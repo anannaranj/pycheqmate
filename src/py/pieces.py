@@ -14,12 +14,15 @@ class Rook(Piece):
     def listMoves(self, pos, m):
         dirs = [(0, 1), (1, 0), (0, -1), (-1, 0)]
         ls = [[], [], [], []]
+        captures = []
         for dir in dirs:
             x = pos
             while not (m.isoccupied((x[0]+dir[0], x[1]+dir[1]))):
                 ls[dirs.index(dir)].append((x[0] + dir[0], x[1] + dir[1]))
                 x = ls[dirs.index(dir)][-1]
-        return sum(ls, [])
+            if m.iscapturable((x[0]+dir[0], x[1]+dir[1]), self.team):
+                captures.append((x[0]+dir[0], x[1]+dir[1]))
+        return [sum(ls, []), captures]
 
 
 class Pawn(Piece):

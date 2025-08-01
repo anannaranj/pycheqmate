@@ -34,13 +34,17 @@ class Board():
         self.C()
 
     # tuple (x, y)
-    def isoccupied(self, pos):
-        if (
+    def isinbounds(self, pos):
+        return (
             0 <= pos[0] and
             pos[0] < 8 and
             0 <= pos[1] and
             pos[1] < 8
-        ):
+        )
+
+    # tuple (x, y)
+    def isoccupied(self, pos):
+        if self.isinbounds(pos):
             if self.cmap[pos[::-1]] is None:
                 return False
             else:
@@ -48,13 +52,21 @@ class Board():
         else:
             return True
 
+    # tuple (x, y)
+    def iscapturable(self, pos, team):
+        if self.isoccupied(pos) and self.isinbounds(pos):
+            return self.cmap[pos[::-1]].team != team
+        else:
+            return False
+
+    # tuple (x, y)
     def listMoves(self, pos):
         return self.cmap[pos[::-1]].listMoves(pos, self)
 
 
 class Game():
     lastClickedPiece = None
-    lastMovesList = []
+    lastMovesList = [None, None]
 
     def __init__(self, initalstate=None):
         self.board = Board(initalstate)

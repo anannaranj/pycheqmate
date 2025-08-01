@@ -55,17 +55,17 @@ Window {
                         id: empty
                         Item {}
                     }
-                    Text {
-                        text: `${parent.cell}`
-                        // Also average Javascript code be like:
-                        color: Math.floor(index / 8) & 1 ? !(index & 1) ? "#ddd" : "#333" : !(index & 1) ? "#333" : "#ddd"
-                        anchors {
-                            left: parent.left
-                            leftMargin: 2
-                            top: parent.top
-                            topMargin: 2
-                        }
-                    }
+                    //Text {
+                    //    text: `${parent.cell}`
+                    //    // Also average Javascript code be like:
+                    //    color: Math.floor(index / 8) & 1 ? !(index & 1) ? "#ddd" : "#333" : !(index & 1) ? "#333" : "#ddd"
+                    //    anchors {
+                    //        left: parent.left
+                    //        leftMargin: 2
+                    //        top: parent.top
+                    //        topMargin: 2
+                    //    }
+                    //}
                     MouseArea {
                         anchors.fill: parent
                         onClicked: {
@@ -90,6 +90,12 @@ Window {
             highlights.forEach(el => {
                 let index = el[1] * 8 + el[0];
                 cells.itemAt(index).color = Math.floor(index / 8) & 1 ? index & 1 ? "#e7dea2" : "#a79f62" : index & 1 ? "#a79f62" : "#e7dea2";
+            });
+        }
+        function onCaptureshighlight(captures) {
+            captures.forEach(el => {
+                let index = el[1] * 8 + el[0];
+                cells.itemAt(index).color = Math.floor(index / 8) & 1 ? index & 1 ? "#cf6363" : "#922626" : index & 1 ? "#922626" : "#cf6363";
             });
         }
         function onHighlightreset(highlights) {
