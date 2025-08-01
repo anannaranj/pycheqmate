@@ -49,7 +49,6 @@ class Board():
             return True
 
     def listMoves(self, pos):
-        print(self.cmap[pos[::-1]])
         return self.cmap[pos[::-1]].listMoves(pos, self)
 
 

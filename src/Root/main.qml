@@ -48,7 +48,8 @@ Window {
                     }
                     Loader {
                         anchors.fill: parent
-                        sourceComponent: parent.piece !== "." && img
+                        sourceComponent: img
+                        active: parent.piece
                     }
                     Component {
                         id: empty
@@ -82,13 +83,13 @@ Window {
         target: bridge
         function onBoardLoaded(map) {
             map.split("").forEach((el, i) => {
-                cells.itemAt(i).piece = el;
+                cells.itemAt(i).piece = el == "." ? null : el;
             });
         }
         function onHighlight(highlights) {
             highlights.forEach(el => {
                 let index = el[1] * 8 + el[0];
-                cells.itemAt(index).color = Math.floor(index / 8) & 1 ? index & 1 ? "#df4" : "#333" : index & 1 ? "#333" : "#df0";
+                cells.itemAt(index).color = Math.floor(index / 8) & 1 ? index & 1 ? "#e7dea2" : "#a79f62" : index & 1 ? "#a79f62" : "#e7dea2";
             });
         }
         function onHighlightreset(highlights) {
