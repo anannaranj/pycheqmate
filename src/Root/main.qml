@@ -8,22 +8,15 @@ Window {
     height: 450
     visible: true
     title: "Pycheqmate"
-    Rectangle {
-        width: 410
-        height: 410
-        border.width: 5
-        border.color: "#333"
+    ColumnLayout {
+        height: Math.min(parent.height * 0.9, parent.width * 0.9)
+        width: Math.min(parent.height * 0.9, parent.width * 0.9)
         anchors {
             centerIn: parent
         }
         Grid {
-            anchors {
-                verticalCenter: parent.verticalCenter
-                horizontalCenter: parent.horizontalCenter
-            }
             columns: 8
             rows: 8
-            spacing: 0
             Repeater {
                 id: cells
                 model: 64
@@ -31,8 +24,8 @@ Window {
                     required property int index
                     property string piece
                     property string cell
-                    width: 50
-                    height: 50
+                    width: parent.parent.width * 0.125
+                    height: parent.parent.width * 0.125
                     cell: "ABCDEFGH".split('')[index % 8] + (8 - Math.floor(index / 8))
                     // Average Javascript code be like:
                     color: Math.floor(index / 8) & 1 ? index & 1 ? "#ddd" : "#333" : index & 1 ? "#333" : "#ddd"
@@ -40,8 +33,6 @@ Window {
                         id: img
                         Image {
                             source: `../../assets/${parent.parent.piece}.png`
-                            width: 50
-                            height: 50
                             mipmap: true
                             anchors.centerIn: parent
                         }
