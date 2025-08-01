@@ -53,5 +53,11 @@ class Board():
 
 
 class Game():
+    lastClickedPiece = None
+    lastMovesList = []
+
     def __init__(self, initalstate=None):
         self.board = Board(initalstate)
+
+    def move(self, f, t):
+        self.board.move(f, t)
