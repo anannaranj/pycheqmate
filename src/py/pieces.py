@@ -8,8 +8,9 @@ class Piece():
 class Rook(Piece):
     def __init__(self, team):
         Piece.__init__(self, team)
-    # pos is a tuple (x, y)
 
+    # pos is a tuple (x, y)
+    # m is the board
     def listMoves(self, pos, m):
         dirs = [(0, 1), (1, 0), (0, -1), (-1, 0)]
         ls = [[], [], [], []]
@@ -24,8 +25,9 @@ class Rook(Piece):
 class Pawn(Piece):
     def __init__(self, team):
         Piece.__init__(self, team)
-    # pos is a tuple (x, y)
 
+    # pos is a tuple (x, y)
+    # m is the board
     def listMoves(self, pos, m):
         ls = []
         # white

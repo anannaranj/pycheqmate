@@ -29,17 +29,17 @@ class Board():
     # t= to
     # both should be tuples representing (x, y)
     def move(self, f, t):
-        self.cmap[t[::-1]], self.cmap[f[::-1]] = self.cmap[f[::-1]], "."
+        self.hmap[t[::-1]], self.hmap[f[::-1]] = self.hmap[f[::-1]], "."
         self.cmap = np.copy(self.hmap)
         self.C()
 
     # tuple (x, y)
     def isoccupied(self, pos):
         if (
-            0 <= pos[::-1][0] and
-            pos[::-1][0] < 8 and
-            0 <= pos[::-1][1] and
-            pos[::-1][1] < 8
+            0 <= pos[0] and
+            pos[0] < 8 and
+            0 <= pos[1] and
+            pos[1] < 8
         ):
             if self.cmap[pos[::-1]] is None:
                 return False
@@ -49,6 +49,7 @@ class Board():
             return True
 
     def listMoves(self, pos):
+        print(self.cmap[pos[::-1]])
         return self.cmap[pos[::-1]].listMoves(pos, self)
 
 

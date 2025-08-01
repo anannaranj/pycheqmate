@@ -15,6 +15,8 @@ class Bridge(QObject):
         QObject.__init__(self)
 
     boardLoaded = Signal(str, arguments=['map'])
+    highlight = Signal(list, arguments=["highlights"])
+    highlightreset = Signal()
 
     @Slot()
     def loadBoard(self):
@@ -25,7 +27,12 @@ class Bridge(QObject):
     @Slot(str)
     def handleClick(self, cell):
         pos = notationToPos(cell)
-        print(g[0].board.hmap[pos])
+
+        if g[0].board.cmap[pos[::-1]] is not None:
+            self.highlightreset.emit()
+            self.highlight.emit([list(v) for v in g[0].board.listMoves(pos)])
+        else:
+            self.highlightreset.emit()
 
 
 if __name__ == "__main__":
@@ -37,7 +44,6 @@ if __name__ == "__main__":
 
     engine.load(QUrl(str(Path(__file__).parent) + "/Root/main.qml"))
 
-    print(g[0])
     if not engine.rootObjects():
         sys.exit(-1)
 
