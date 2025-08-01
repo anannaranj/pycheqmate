@@ -1,6 +1,6 @@
 # Pycheqmate
 
-A (yet another...) chess clone made using Python and QT6 
+A (yet another...) chess implementation made using Python and QT6 
 
 # Development:
 ### if you want to try this from source code:
