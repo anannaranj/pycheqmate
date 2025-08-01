@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from py.pieces import Pawn, Rook, Bishop, Queen
+from py.pieces import Pawn, Rook, Bishop, Queen, King, Knight
 
 
 class Board():
@@ -28,6 +28,10 @@ class Board():
         self.cmap[self.cmap == "p"] = Pawn(False)
         self.cmap[self.cmap == "Q"] = Queen(True)
         self.cmap[self.cmap == "q"] = Queen(False)
+        self.cmap[self.cmap == "K"] = King(True)
+        self.cmap[self.cmap == "k"] = King(False)
+        self.cmap[self.cmap == "N"] = Knight(True)
+        self.cmap[self.cmap == "n"] = Knight(False)
 
     # f= from
     # t= to

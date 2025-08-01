@@ -93,4 +93,50 @@ class Pawn(Piece):
                 captures.append(p)
 
         # TODO: missing en passant implementation
+        # TODO: missing promotion implementation
+
+        return [ls, captures]
+
+
+class Knight(Piece):
+    def __init__(self, team):
+        Piece.__init__(self, team)
+
+    # pos is a tuple (x, y)
+    # m is the board
+    def listMoves(self, pos, m):
+        dirs = [(2, 1), (1, 2), (-1, 2), (-2, 1),
+                (-2, -1), (-1, -2), (1, -2), (2, -1)]
+        ls = []
+        captures = []
+        for dir in dirs:
+            p = (dir[0] + pos[0], dir[1] + pos[1])
+            if not m.isoccupied(p):
+                ls.append(p)
+            elif m.iscapturable(p, self.team):
+                captures.append(p)
+
+        return [ls, captures]
+
+
+class King(Piece):
+    def __init__(self, team):
+        Piece.__init__(self, team)
+
+    # pos is a tuple (x, y)
+    # m is the board
+    def listMoves(self, pos, m):
+        dirs = [(0, 1), (1, 0), (0, -1), (-1, 0),
+                (1, 1), (-1, -1), (-1, 1), (1, -1)]
+        ls = []
+        captures = []
+        for dir in dirs:
+            p = (dir[0] + pos[0], dir[1] + pos[1])
+            if not m.isoccupied(p):
+                ls.append(p)
+            elif m.iscapturable(p, self.team):
+                captures.append(p)
+
+        # TODO: missing castling implementation
+        # TODO: missing immutability implementation
         return [ls, captures]

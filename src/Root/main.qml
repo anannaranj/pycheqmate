@@ -55,17 +55,6 @@ Window {
                         id: empty
                         Item {}
                     }
-                    //Text {
-                    //    text: `${parent.cell}`
-                    //    // Also average Javascript code be like:
-                    //    color: Math.floor(index / 8) & 1 ? !(index & 1) ? "#ddd" : "#333" : !(index & 1) ? "#333" : "#ddd"
-                    //    anchors {
-                    //        left: parent.left
-                    //        leftMargin: 2
-                    //        top: parent.top
-                    //        topMargin: 2
-                    //    }
-                    //}
                     MouseArea {
                         anchors.fill: parent
                         onClicked: {
