@@ -1,6 +1,7 @@
 # Pycheqmate
 
 A (yet another...) chess implementation made using Python and Qt6 
+![A screenshot](./Screenshot.png)
 
 # Development:
 ### if you want to try this from source code:
