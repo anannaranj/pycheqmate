@@ -74,16 +74,23 @@ class Pawn(Piece):
     # m is the board
     def listMoves(self, pos, m):
         ls = []
-        # white
-        if self.team:
-            if not m.isoccupied((pos[0], pos[1]-1)):
-                ls.append((pos[0], pos[1]-1))
-            if pos[1] == 6 and not m.isoccupied((pos[0], pos[1]-1)) and not m.isoccupied((pos[0], pos[1]-2)):
-                ls.append((pos[0], pos[1]-2))
-        # black
-        else:
-            if not m.isoccupied((pos[0], pos[1]+1)):
-                ls.append((pos[0], pos[1]+1))
-            if pos[1] == 1 and not m.isoccupied((pos[0], pos[1]-1)) and not m.isoccupied((pos[0], pos[1]+2)):
-                ls.append((pos[0], pos[1]+2))
-        return ls
+        captures = []
+
+        dir = {True: -1, False: 1}
+        d = dir[self.team]
+
+        oneblock = (pos[0], pos[1] + d)
+        if not m.isoccupied(oneblock):
+            ls.append(oneblock)
+
+        twoblocks = (pos[0], pos[1] + 2 * d)
+        if pos[1] == 3.5 - 2.5 * d and not m.isoccupied(oneblock) and not m.isoccupied(twoblocks):
+            ls.append(twoblocks)
+
+        for x in [1, -1]:
+            p = (pos[0] + x, pos[1] + d)
+            if m.iscapturable(p, self.team):
+                captures.append(p)
+
+        # TODO: missing en passant implementation
+        return [ls, captures]
