@@ -25,6 +25,47 @@ class Rook(Piece):
         return [sum(ls, []), captures]
 
 
+class Bishop(Piece):
+    def __init__(self, team):
+        Piece.__init__(self, team)
+
+    # pos is a tuple (x, y)
+    # m is the board
+    def listMoves(self, pos, m):
+        dirs = [(1, 1), (1, -1), (-1, -1), (-1, 1)]
+        ls = [[], [], [], []]
+        captures = []
+        for dir in dirs:
+            x = pos
+            while not (m.isoccupied((x[0]+dir[0], x[1]+dir[1]))):
+                ls[dirs.index(dir)].append((x[0] + dir[0], x[1] + dir[1]))
+                x = ls[dirs.index(dir)][-1]
+            if m.iscapturable((x[0]+dir[0], x[1]+dir[1]), self.team):
+                captures.append((x[0]+dir[0], x[1]+dir[1]))
+        return [sum(ls, []), captures]
+
+
+class Queen(Piece):
+    def __init__(self, team):
+        Piece.__init__(self, team)
+
+    # pos is a tuple (x, y)
+    # m is the board
+    def listMoves(self, pos, m):
+        dirs = [(0, 1), (1, 0), (0, -1), (-1, 0),
+                (1, 1), (1, -1), (-1, -1), (-1, 1)]
+        ls = [[], [], [], [], [], [], [], []]
+        captures = []
+        for dir in dirs:
+            x = pos
+            while not (m.isoccupied((x[0]+dir[0], x[1]+dir[1]))):
+                ls[dirs.index(dir)].append((x[0] + dir[0], x[1] + dir[1]))
+                x = ls[dirs.index(dir)][-1]
+            if m.iscapturable((x[0]+dir[0], x[1]+dir[1]), self.team):
+                captures.append((x[0]+dir[0], x[1]+dir[1]))
+        return [sum(ls, []), captures]
+
+
 class Pawn(Piece):
     def __init__(self, team):
         Piece.__init__(self, team)
