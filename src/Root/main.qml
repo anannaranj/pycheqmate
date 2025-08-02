@@ -8,13 +8,17 @@ Window {
     height: 450
     visible: true
     title: "Pycheqmate"
-    ColumnLayout {
-        height: Math.min(parent.height * 0.9, parent.width * 0.9)
-        width: Math.min(parent.height * 0.9, parent.width * 0.9)
+    Rectangle {
+        height: Math.min(parent.height * 0.8, parent.width * 0.8)
+        width: Math.min(parent.height * 0.8, parent.width * 0.8)
         anchors {
             centerIn: parent
         }
         Grid {
+            id: board
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+            }
             columns: 8
             rows: 8
             Repeater {
@@ -24,8 +28,8 @@ Window {
                     required property int index
                     property string piece
                     property string cell
-                    width: parent.parent.width * 0.125
-                    height: parent.parent.width * 0.125
+                    width: parent.parent.width * 0.115
+                    height: parent.parent.height * 0.115
                     cell: "ABCDEFGH".split('')[index % 8] + (8 - Math.floor(index / 8))
                     // Average Javascript code be like:
                     color: Math.floor(index / 8) & 1 ? index & 1 ? "#ddd" : "#333" : index & 1 ? "#333" : "#ddd"
@@ -52,6 +56,24 @@ Window {
                             bridge.handleClick(parent.cell);
                         }
                     }
+                }
+            }
+        }
+        Rectangle {
+            height: parent.height * (1 - 0.115 * 8)
+            width: parent.width
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                top: board.bottom
+            }
+            Text {
+                id: turn
+                text: "White's turn"
+                fontSizeMode: Text.Fit
+                minimumPixelSize: 10
+                font.pixelSize: 42
+                anchors {
+                    centerIn: parent
                 }
             }
         }
@@ -82,6 +104,9 @@ Window {
             for (let index = 0; index < 64; index++) {
                 cells.itemAt(index).color = Math.floor(index / 8) & 1 ? index & 1 ? "#ddd" : "#333" : index & 1 ? "#333" : "#ddd";
             }
+        }
+        function onSwitchTeam(team) {
+            turn.text = team ? "White's turn" : "Black's turn";
         }
     }
 }

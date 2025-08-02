@@ -18,6 +18,7 @@ class Bridge(QObject):
     highlight = Signal(list, arguments=["highlights"])
     captureshighlight = Signal(list, arguments=["captures"])
     highlightreset = Signal()
+    switchTeam = Signal(bool, arguments=["team"])
 
     @Slot()
     def loadBoard(self):
@@ -35,6 +36,7 @@ class Bridge(QObject):
             g[0].move(g[0].lastClickedPiece, pos)
             self.loadBoard()
             self.highlightreset.emit()
+            self.switchTeam.emit(not g[0].board.cmap[pos[::-1]].team)
             g[0].lastMovesList = [None, None]
         elif g[0].board.cmap[pos[::-1]] is not None:
             if g[0].board.cmap[pos[::-1]].team != len(g[0].history) % 2:
@@ -51,6 +53,7 @@ class Bridge(QObject):
             if g[0].lastMovesList[0] is not None and pos in g[0].lastMovesList[0]:
                 g[0].move(g[0].lastClickedPiece, pos)
                 self.loadBoard()
+                self.switchTeam.emit(not g[0].board.cmap[pos[::-1]].team)
             self.highlightreset.emit()
             g[0].lastMovesList = [None, None]
 
