@@ -1,8 +1,24 @@
+import numpy as np
 # the piece class is just the fundamental methods and values for all the 6 pieces
+
+
 class Piece():
     # the team is a boolean, True for white, False for black
     def __init__(self, team):
         self.team = team
+
+
+def dirsLoop(dirs, pos, m, s):
+    ls = [[] for _ in dirs]
+    captures = []
+    for dir in dirs:
+        x = pos
+        while not (m.isoccupied((x[0]+dir[0], x[1]+dir[1])) in ["K" if s.team else "k", True]):
+            ls[dirs.index(dir)].append((x[0] + dir[0], x[1] + dir[1]))
+            x = ls[dirs.index(dir)][-1]
+        if m.iscapturable((x[0]+dir[0], x[1]+dir[1]), s.team):
+            captures.append((x[0]+dir[0], x[1]+dir[1]))
+    return [sum(ls, []), captures]
 
 
 class Rook(Piece):
@@ -13,16 +29,7 @@ class Rook(Piece):
     # m is the board
     def listMoves(self, pos, m):
         dirs = [(0, 1), (1, 0), (0, -1), (-1, 0)]
-        ls = [[], [], [], []]
-        captures = []
-        for dir in dirs:
-            x = pos
-            while not (m.isoccupied((x[0]+dir[0], x[1]+dir[1]))):
-                ls[dirs.index(dir)].append((x[0] + dir[0], x[1] + dir[1]))
-                x = ls[dirs.index(dir)][-1]
-            if m.iscapturable((x[0]+dir[0], x[1]+dir[1]), self.team):
-                captures.append((x[0]+dir[0], x[1]+dir[1]))
-        return [sum(ls, []), captures]
+        return dirsLoop(dirs, pos, m, self)
 
 
 class Bishop(Piece):
@@ -33,16 +40,7 @@ class Bishop(Piece):
     # m is the board
     def listMoves(self, pos, m):
         dirs = [(1, 1), (1, -1), (-1, -1), (-1, 1)]
-        ls = [[], [], [], []]
-        captures = []
-        for dir in dirs:
-            x = pos
-            while not (m.isoccupied((x[0]+dir[0], x[1]+dir[1]))):
-                ls[dirs.index(dir)].append((x[0] + dir[0], x[1] + dir[1]))
-                x = ls[dirs.index(dir)][-1]
-            if m.iscapturable((x[0]+dir[0], x[1]+dir[1]), self.team):
-                captures.append((x[0]+dir[0], x[1]+dir[1]))
-        return [sum(ls, []), captures]
+        return dirsLoop(dirs, pos, m, self)
 
 
 class Queen(Piece):
@@ -54,16 +52,7 @@ class Queen(Piece):
     def listMoves(self, pos, m):
         dirs = [(0, 1), (1, 0), (0, -1), (-1, 0),
                 (1, 1), (1, -1), (-1, -1), (-1, 1)]
-        ls = [[], [], [], [], [], [], [], []]
-        captures = []
-        for dir in dirs:
-            x = pos
-            while not (m.isoccupied((x[0]+dir[0], x[1]+dir[1]))):
-                ls[dirs.index(dir)].append((x[0] + dir[0], x[1] + dir[1]))
-                x = ls[dirs.index(dir)][-1]
-            if m.iscapturable((x[0]+dir[0], x[1]+dir[1]), self.team):
-                captures.append((x[0]+dir[0], x[1]+dir[1]))
-        return [sum(ls, []), captures]
+        return dirsLoop(dirs, pos, m, self)
 
 
 class Pawn(Piece):
@@ -132,11 +121,12 @@ class King(Piece):
         captures = []
         for dir in dirs:
             p = (dir[0] + pos[0], dir[1] + pos[1])
-            if not m.isoccupied(p):
-                ls.append(p)
-            elif m.iscapturable(p, self.team):
-                captures.append(p)
+            if m.isinbounds(p):
+                if not m.isvulnerable(p, self.team):
+                    if not m.isoccupied(p):
+                        ls.append(p)
+                    elif m.iscapturable(p, self.team):
+                        captures.append(p)
 
         # TODO: missing castling implementation
-        # TODO: missing immutability implementation
         return [ls, captures]

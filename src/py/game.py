@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from py.pieces import Pawn, Rook, Bishop, Queen, King, Knight
+from py.pieces import King, Queen, Rook, Knight, Bishop, Pawn
 
 
 class Board():
@@ -20,18 +20,18 @@ class Board():
     # converts it to a computer style data
     def C(self):
         self.cmap[self.cmap == "."] = None
+        self.cmap[self.cmap == "K"] = King(True)
+        self.cmap[self.cmap == "k"] = King(False)
+        self.cmap[self.cmap == "Q"] = Queen(True)
+        self.cmap[self.cmap == "q"] = Queen(False)
         self.cmap[self.cmap == "R"] = Rook(True)
         self.cmap[self.cmap == "r"] = Rook(False)
+        self.cmap[self.cmap == "N"] = Knight(True)
+        self.cmap[self.cmap == "n"] = Knight(False)
         self.cmap[self.cmap == "B"] = Bishop(True)
         self.cmap[self.cmap == "b"] = Bishop(False)
         self.cmap[self.cmap == "P"] = Pawn(True)
         self.cmap[self.cmap == "p"] = Pawn(False)
-        self.cmap[self.cmap == "Q"] = Queen(True)
-        self.cmap[self.cmap == "q"] = Queen(False)
-        self.cmap[self.cmap == "K"] = King(True)
-        self.cmap[self.cmap == "k"] = King(False)
-        self.cmap[self.cmap == "N"] = Knight(True)
-        self.cmap[self.cmap == "n"] = Knight(False)
 
     # f= from
     # t= to
@@ -55,6 +55,8 @@ class Board():
             if self.cmap[pos[::-1]] is None:
                 return False
             else:
+                if type(self.cmap[pos[::-1]]) is King:
+                    return "K" if self.cmap[pos[::-1]].team else "k"
                 return True
         else:
             return True
@@ -65,6 +67,27 @@ class Board():
             return self.cmap[pos[::-1]].team != team
         else:
             return False
+
+    # tuple (x, y)
+    def isvulnerable(self, pos, team):
+        for x in range(8):
+            for y in range(8):
+                cellpos = (x, y)
+                cell = self.cmap[cellpos[::-1]]
+                if cell is None:
+                    continue
+                if cell.team is team:
+                    continue
+                if type(cell) is King:
+                    dirs = [(0, 1), (1, 0), (0, -1), (-1, 0),
+                            (1, 1), (-1, -1), (-1, 1), (1, -1)]
+                    if pos in [(dir[0] + cellpos[0], dir[1] + cellpos[1]) for dir in dirs]:
+                        return True
+                    continue
+                moves = cell.listMoves(cellpos, self)
+                if pos in moves[0]:
+                    return True
+        return False
 
     # tuple (x, y)
     def listMoves(self, pos):
