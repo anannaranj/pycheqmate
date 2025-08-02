@@ -37,11 +37,16 @@ class Bridge(QObject):
             self.highlightreset.emit()
             g[0].lastMovesList = [None, None]
         elif g[0].board.cmap[pos[::-1]] is not None:
-            moveslist = g[0].board.listMoves(pos)
-            g[0].lastMovesList = moveslist
-            self.highlightreset.emit()
-            self.highlight.emit([list(v) for v in moveslist[0]])
-            self.captureshighlight.emit([list(v) for v in moveslist[1]])
+            if g[0].board.cmap[pos[::-1]].team != len(g[0].history) % 2:
+                moveslist = g[0].board.listMoves(pos)
+                g[0].lastMovesList = moveslist
+                self.highlightreset.emit()
+                self.highlight.emit([list(v) for v in moveslist[0]])
+                self.captureshighlight.emit([list(v) for v in moveslist[1]])
+            else:
+                self.highlightreset.emit()
+                g[0].lastMovesList = [None, None]
+
         else:
             if g[0].lastMovesList[0] is not None and pos in g[0].lastMovesList[0]:
                 g[0].move(g[0].lastClickedPiece, pos)
@@ -50,6 +55,7 @@ class Bridge(QObject):
             g[0].lastMovesList = [None, None]
 
         g[0].lastClickedPiece = pos
+        print(g[0].history)
 
 
 if __name__ == "__main__":

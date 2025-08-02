@@ -115,4 +115,4 @@ class Game():
 
     def move(self, f, t):
         self.board.move(f, t)
-        self.history.append((f, t))
+        self.history.append([f, t])
