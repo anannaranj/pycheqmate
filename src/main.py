@@ -22,8 +22,8 @@ class Bridge(QObject):
     @Slot()
     def loadBoard(self):
         if g[0] is None:
-            # g[0] = Game("src/csv/kings.csv")
-            g[0] = Game()
+            g[0] = Game("src/csv/pinned.csv")
+            # g[0] = Game()
         x = "".join(["".join(i) for i in g[0].board.hmap])
         self.boardLoaded.emit(x)
 
@@ -50,6 +50,7 @@ class Bridge(QObject):
             g[0].lastMovesList = [None, None]
 
         g[0].lastClickedPiece = pos
+        print(g[0].board.getKingPos(True))
 
 
 if __name__ == "__main__":

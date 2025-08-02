@@ -8,12 +8,8 @@ class Board():
     # it is a string that is the path to the csv
     cmap = None
 
-    def __init__(self, initalstate=None):
-        if initalstate is None:
-            self.hmap = np.array(pd.read_csv(
-                "src/csv/default.csv", header=None))
-        else:
-            self.hmap = np.array(pd.read_csv(initalstate, header=None))
+    def __init__(self, hmap):
+        self.hmap = hmap
         self.cmap = np.copy(self.hmap)
         self.C()
 
@@ -93,13 +89,25 @@ class Board():
     def listMoves(self, pos):
         return self.cmap[pos[::-1]].listMoves(pos, self)
 
+    def createEnv(self):
+        return Board(np.copy(self.hmap))
+
+    def getKingPos(self, team):
+        return tuple(np.asarray(np.where(self.hmap == ("K" if team else "k"))).T.tolist()[0])
+
 
 class Game():
     lastClickedPiece = None
     lastMovesList = [None, None]
+    history = []
 
     def __init__(self, initalstate=None):
-        self.board = Board(initalstate)
+        if initalstate is None:
+            hmap = np.array(pd.read_csv(
+                "src/csv/default.csv", header=None))
+        else:
+            hmap = np.array(pd.read_csv(initalstate, header=None))
+        self.board = Board(hmap)
 
     def move(self, f, t):
         self.board.move(f, t)
