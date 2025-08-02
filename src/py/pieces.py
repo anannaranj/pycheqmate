@@ -13,11 +13,13 @@ def dirsLoop(dirs, pos, m, s):
     captures = []
     for dir in dirs:
         x = pos
-        while not (m.isoccupied((x[0]+dir[0], x[1]+dir[1])) in ["K" if s.team else "k", True]):
-            ls[dirs.index(dir)].append((x[0] + dir[0], x[1] + dir[1]))
+        p = (x[0]+dir[0], x[1]+dir[1])
+        while not (m.isoccupied(p) in ["K" if s.team else "k", True]):
+            ls[dirs.index(dir)].append(p)
             x = ls[dirs.index(dir)][-1]
-        if m.iscapturable((x[0]+dir[0], x[1]+dir[1]), s.team):
-            captures.append((x[0]+dir[0], x[1]+dir[1]))
+            p = (x[0]+dir[0], x[1]+dir[1])
+        if m.iscapturable(p, s.team):
+            captures.append(p)
     return [sum(ls, []), captures]
 
 

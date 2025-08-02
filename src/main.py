@@ -50,7 +50,6 @@ class Bridge(QObject):
             g[0].lastMovesList = [None, None]
 
         g[0].lastClickedPiece = pos
-        print(g[0].board.getKingPos(True))
 
 
 if __name__ == "__main__":
