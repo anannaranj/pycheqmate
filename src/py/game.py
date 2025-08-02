@@ -38,8 +38,7 @@ class Board():
     # both should be tuples representing (x, y)
     def move(self, f, t):
         self.hmap[t[::-1]], self.hmap[f[::-1]] = self.hmap[f[::-1]], "."
-        self.cmap = np.copy(self.hmap)
-        self.C()
+        self.cmap[t[::-1]], self.cmap[f[::-1]] = self.cmap[f[::-1]], None
 
     # tuple (x, y)
     def isinbounds(self, pos):
