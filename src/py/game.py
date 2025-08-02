@@ -80,6 +80,10 @@ class Board():
                     if pos in [(dir[0] + cellpos[0], dir[1] + cellpos[1]) for dir in dirs]:
                         return True
                     continue
+                if type(cell) is Pawn:
+                    if pos in [(cellpos[0] + x, cellpos[1] + {True: -1, False: 1}[cell.team]) for x in [1, -1]]:
+                        return True
+                    continue
                 moves = cell.listMoves(cellpos, self)
                 if pos in moves[0]:
                     return True
