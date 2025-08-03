@@ -8,17 +8,17 @@ class Piece():
         self.team = team
 
 
-def dirsLoop(dirs, pos, m, s):
+def dirsLoop(dirs, pos, m, team):
     ls = [[] for _ in dirs]
     captures = []
     for dir in dirs:
         x = pos
         p = (x[0]+dir[0], x[1]+dir[1])
-        while not (m.isoccupied(p) in ["K" if s.team else "k", True]):
+        while not m.isoccupied(p):
             ls[dirs.index(dir)].append(p)
             x = ls[dirs.index(dir)][-1]
             p = (x[0]+dir[0], x[1]+dir[1])
-        if m.iscapturable(p, s.team):
+        if m.iscapturable(p, team):
             captures.append(p)
     return [sum(ls, []), captures]
 
@@ -31,7 +31,23 @@ class Rook(Piece):
     # m is the board
     def listMoves(self, pos, m):
         dirs = [(0, 1), (1, 0), (0, -1), (-1, 0)]
-        return dirsLoop(dirs, pos, m, self)
+        looped = dirsLoop(dirs, pos, m, self.team)
+        ls = []
+        captures = []
+        for p in looped[0]:
+            env = m.createEnv()
+            env.move(pos, p)
+            if not env.isvulnerable(env.getKingPos(self.team), self.team):
+                ls.append(p)
+            del env
+        for p in looped[1]:
+            env = m.createEnv()
+            env.move(pos, p)
+            if not env.isvulnerable(env.getKingPos(self.team), self.team):
+                captures.append(p)
+            del env
+
+        return [ls, captures]
 
 
 class Bishop(Piece):
@@ -42,7 +58,23 @@ class Bishop(Piece):
     # m is the board
     def listMoves(self, pos, m):
         dirs = [(1, 1), (1, -1), (-1, -1), (-1, 1)]
-        return dirsLoop(dirs, pos, m, self)
+        looped = dirsLoop(dirs, pos, m, self.team)
+        ls = []
+        captures = []
+        for p in looped[0]:
+            env = m.createEnv()
+            env.move(pos, p)
+            if not env.isvulnerable(env.getKingPos(self.team), self.team):
+                ls.append(p)
+            del env
+        for p in looped[1]:
+            env = m.createEnv()
+            env.move(pos, p)
+            if not env.isvulnerable(env.getKingPos(self.team), self.team):
+                captures.append(p)
+            del env
+
+        return [ls, captures]
 
 
 class Queen(Piece):
@@ -54,7 +86,23 @@ class Queen(Piece):
     def listMoves(self, pos, m):
         dirs = [(0, 1), (1, 0), (0, -1), (-1, 0),
                 (1, 1), (1, -1), (-1, -1), (-1, 1)]
-        return dirsLoop(dirs, pos, m, self)
+        looped = dirsLoop(dirs, pos, m, self.team)
+        ls = []
+        captures = []
+        for p in looped[0]:
+            env = m.createEnv()
+            env.move(pos, p)
+            if not env.isvulnerable(env.getKingPos(self.team), self.team):
+                ls.append(p)
+            del env
+        for p in looped[1]:
+            env = m.createEnv()
+            env.move(pos, p)
+            if not env.isvulnerable(env.getKingPos(self.team), self.team):
+                captures.append(p)
+            del env
+
+        return [ls, captures]
 
 
 class Pawn(Piece):
@@ -67,26 +115,36 @@ class Pawn(Piece):
         ls = []
         captures = []
 
-        dir = {True: -1, False: 1}
-        d = dir[self.team]
+        d = {True: -1, False: 1}[self.team]
 
         oneblock = (pos[0], pos[1] + d)
         if not m.isoccupied(oneblock):
-            ls.append(oneblock)
+            env = m.createEnv()
+            env.move(pos, oneblock)
+            if not env.isvulnerable(env.getKingPos(self.team), self.team):
+                ls.append(oneblock)
+            del env
 
         twoblocks = (pos[0], pos[1] + 2 * d)
         if pos[1] == 3.5 - 2.5 * d and not m.isoccupied(oneblock) and not m.isoccupied(twoblocks):
-            ls.append(twoblocks)
+            env = m.createEnv()
+            env.move(pos, twoblocks)
+            if not env.isvulnerable(env.getKingPos(self.team), self.team):
+                ls.append(twoblocks)
+            del env
 
         for x in [1, -1]:
             p = (pos[0] + x, pos[1] + d)
             if m.iscapturable(p, self.team):
-                captures.append(p)
-
-        # TODO: missing en passant implementation
-        # TODO: missing promotion implementation
+                env = m.createEnv()
+                env.move(pos, p)
+                if not env.isvulnerable(env.getKingPos(self.team), self.team):
+                    captures.append(p)
+                del env
 
         return [ls, captures]
+        # TODO: missing en passant implementation
+        # TODO: missing promotion implementation
 
 
 class Knight(Piece):
@@ -103,9 +161,17 @@ class Knight(Piece):
         for dir in dirs:
             p = (dir[0] + pos[0], dir[1] + pos[1])
             if not m.isoccupied(p):
-                ls.append(p)
+                env = m.createEnv()
+                env.move(pos, p)
+                if not env.isvulnerable(env.getKingPos(self.team), self.team):
+                    ls.append(p)
+                del env
             elif m.iscapturable(p, self.team):
-                captures.append(p)
+                env = m.createEnv()
+                env.move(pos, p)
+                if not env.isvulnerable(env.getKingPos(self.team), self.team):
+                    captures.append(p)
+                del env
 
         return [ls, captures]
 
@@ -124,11 +190,18 @@ class King(Piece):
         for dir in dirs:
             p = (dir[0] + pos[0], dir[1] + pos[1])
             if m.isinbounds(p):
-                if not m.isvulnerable(p, self.team):
-                    if not m.isoccupied(p):
+                if not m.isoccupied(p):
+                    env = m.createEnv()
+                    env.move(pos, p)
+                    if not env.isvulnerable(p, self.team):
                         ls.append(p)
-                    elif m.iscapturable(p, self.team):
+                    del env
+                elif m.iscapturable(p, self.team):
+                    env = m.createEnv()
+                    env.move(pos, p)
+                    if not env.isvulnerable(p, self.team):
                         captures.append(p)
+                    del env
 
-        # TODO: missing castling implementation
         return [ls, captures]
+        # TODO: missing castling implementation

@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from py.pieces import King, Queen, Rook, Knight, Bishop, Pawn
+from py.pieces import King, Queen, Rook, Knight, Bishop, Pawn, dirsLoop
 
 
 class Board():
@@ -51,8 +51,6 @@ class Board():
             if self.cmap[pos[::-1]] is None:
                 return False
             else:
-                if type(self.cmap[pos[::-1]]) is King:
-                    return "K" if self.cmap[pos[::-1]].team else "k"
                 return True
         else:
             return True
@@ -66,26 +64,36 @@ class Board():
 
     # tuple (x, y)
     def isvulnerable(self, pos, team):
-        for x in range(8):
-            for y in range(8):
-                cellpos = (x, y)
-                cell = self.cmap[cellpos[::-1]]
-                if cell is None:
-                    continue
-                if cell.team is team:
-                    continue
-                if type(cell) is King:
-                    dirs = [(0, 1), (1, 0), (0, -1), (-1, 0),
-                            (1, 1), (-1, -1), (-1, 1), (1, -1)]
-                    if pos in [(dir[0] + cellpos[0], dir[1] + cellpos[1]) for dir in dirs]:
-                        return True
-                    continue
-                if type(cell) is Pawn:
-                    if pos in [(cellpos[0] + x, cellpos[1] + {True: -1, False: 1}[cell.team]) for x in [1, -1]]:
-                        return True
-                    continue
-                moves = cell.listMoves(cellpos, self)
-                if pos in moves[0]:
+        x = dirsLoop([(0, 1), (1, 0), (0, -1), (-1, 0)], pos, self, team)
+        for i in sum(x, []):
+            p = self.cmap[i[::-1]]
+            if (type(p) is Rook or type(p) is Queen) and p.team is not team:
+                return True
+        y = dirsLoop([(1, 1), (1, -1), (-1, -1), (-1, 1)], pos, self, team)
+        for i in sum(y, []):
+            p = self.cmap[i[::-1]]
+            if (type(p) is Bishop or type(p) is Queen) and p.team is not team:
+                return True
+        for dir in [(2, 1), (1, 2), (-1, 2), (-2, 1),
+                    (-2, -1), (-1, -2), (1, -2), (2, -1)]:
+            p = (dir[0] + pos[0], dir[1] + pos[1])
+            if self.isinbounds(p) and self.isoccupied(p):
+                piece = self.cmap[p[::-1]]
+                if type(piece) is Knight and piece.team is not team:
+                    return True
+        d = {True: -1, False: 1}[team]
+        for x in [1, -1]:
+            p = (pos[0] + x, pos[1] + d)
+            if self.isinbounds(p) and self.isoccupied(p):
+                piece = self.cmap[p[::-1]]
+                if type(piece) is Pawn and piece.team is not team:
+                    return True
+        for dir in [(0, 1), (1, 0), (0, -1), (-1, 0),
+                    (1, 1), (-1, -1), (-1, 1), (1, -1)]:
+            p = (dir[0] + pos[0], dir[1] + pos[1])
+            if self.isinbounds(p) and self.isoccupied(p):
+                piece = self.cmap[p[::-1]]
+                if type(piece) is King and piece.team is not team:
                     return True
         return False
 
@@ -97,7 +105,7 @@ class Board():
         return Board(np.copy(self.hmap))
 
     def getKingPos(self, team):
-        return tuple(np.asarray(np.where(self.hmap == ("K" if team else "k"))).T.tolist()[0])
+        return tuple(np.asarray(np.where(self.hmap == ("K" if team else "k"))).T.tolist()[0])[::-1]
 
 
 class Game():
