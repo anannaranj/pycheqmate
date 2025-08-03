@@ -122,5 +122,8 @@ class Game():
         self.board = Board(hmap)
 
     def move(self, f, t):
+        if hasattr(self.board.cmap[f[::-1]], 'firstMove'):
+            if self.board.cmap[f[::-1]].firstMove is None:
+                self.board.cmap[f[::-1]].firstMove = len(self.history)
         self.board.move(f, t)
         self.history.append([f, t])

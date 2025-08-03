@@ -42,6 +42,10 @@ def straightliners(looped, pos, m, team):
 
 
 class King(Piece):
+    # a simple variable that is the index of the first move in history
+    # reason being is to detect if it is possible to castle now
+    firstMove = None
+
     def __init__(self, team):
         Piece.__init__(self, team)
 
@@ -86,6 +90,10 @@ class Queen(Piece):
 
 
 class Rook(Piece):
+    # a simple variable that is the index of the first move in history
+    # reason being is to detect if it is possible to castle now
+    firstMove = None
+
     def __init__(self, team):
         Piece.__init__(self, team)
 
@@ -139,6 +147,26 @@ class Knight(Piece):
 
 
 class Pawn(Piece):
+    # a simple variable that is the index of the first move in history
+    # reason being is to detect if it is possible to EN PASSANT
+    firstMove = None
+    # and btw.. if you didn't understand that word:
+    """
+
++------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|                                               oooo                                                                                                         .     |
+|                                               `888                                                                                                       .o8     |
+|      .oooooooo  .ooooo.   .ooooo.   .oooooooo  888   .ooooo.      .ooooo.  ooo. .oo.      oo.ooooo.   .oooo.    .oooo.o  .oooo.o  .oooo.   ooo. .oo.   .o888oo   |
+|     888' `88b  d88' `88b d88' `88b 888' `88b   888  d88' `88b    d88' `88b `888P"Y88b      888' `88b `P  )88b  d88(  "8 d88(  "8 `P  )88b  `888P"Y88b    888     |
+|     888   888  888   888 888   888 888   888   888  888ooo888    888ooo888  888   888      888   888  .oP"888  `"Y88b.  `"Y88b.   .oP"888   888   888    888     |
+|     `88bod8P'  888   888 888   888 `88bod8P'   888  888    .o    888    .o  888   888      888   888 d8(  888  o.  )88b o.  )88b d8(  888   888   888    888 .   |
+|     `8oooooo.  `Y8bod8P' `Y8bod8P' `8oooooo.  o888o `Y8bod8P'    `Y8bod8P' o888o o888o     888bod8P' `Y888""8o 8""888P' 8""888P' `Y888""8o o888o o888o   "888"   |
+|     d"     YD                      d"     YD                                               888                                                                   |
+|     "Y88888P'                      "Y88888P'                                              o888o                                                                  |
++------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+    """
+
     def __init__(self, team):
         Piece.__init__(self, team)
 
