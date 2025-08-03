@@ -23,58 +23,53 @@ def dirsLoop(dirs, pos, m, team):
     return [sum(ls, []), captures]
 
 
-class Rook(Piece):
+def straightliners(looped, pos, m, team):
+    ls = []
+    captures = []
+    for p in looped[0]:
+        env = m.createEnv()
+        env.move(pos, p)
+        if not env.isvulnerable(env.getKingPos(team), team):
+            ls.append(p)
+        del env
+    for p in looped[1]:
+        env = m.createEnv()
+        env.move(pos, p)
+        if not env.isvulnerable(env.getKingPos(team), team):
+            captures.append(p)
+        del env
+    return [ls, captures]
+
+
+class King(Piece):
     def __init__(self, team):
         Piece.__init__(self, team)
 
     # pos is a tuple (x, y)
     # m is the board
     def listMoves(self, pos, m):
-        dirs = [(0, 1), (1, 0), (0, -1), (-1, 0)]
-        looped = dirsLoop(dirs, pos, m, self.team)
+        dirs = [(0, 1), (1, 0), (0, -1), (-1, 0),
+                (1, 1), (-1, -1), (-1, 1), (1, -1)]
         ls = []
         captures = []
-        for p in looped[0]:
-            env = m.createEnv()
-            env.move(pos, p)
-            if not env.isvulnerable(env.getKingPos(self.team), self.team):
-                ls.append(p)
-            del env
-        for p in looped[1]:
-            env = m.createEnv()
-            env.move(pos, p)
-            if not env.isvulnerable(env.getKingPos(self.team), self.team):
-                captures.append(p)
-            del env
+        for dir in dirs:
+            p = (dir[0] + pos[0], dir[1] + pos[1])
+            if m.isinbounds(p):
+                if not m.isoccupied(p):
+                    env = m.createEnv()
+                    env.move(pos, p)
+                    if not env.isvulnerable(p, self.team):
+                        ls.append(p)
+                    del env
+                elif m.iscapturable(p, self.team):
+                    env = m.createEnv()
+                    env.move(pos, p)
+                    if not env.isvulnerable(p, self.team):
+                        captures.append(p)
+                    del env
 
         return [ls, captures]
-
-
-class Bishop(Piece):
-    def __init__(self, team):
-        Piece.__init__(self, team)
-
-    # pos is a tuple (x, y)
-    # m is the board
-    def listMoves(self, pos, m):
-        dirs = [(1, 1), (1, -1), (-1, -1), (-1, 1)]
-        looped = dirsLoop(dirs, pos, m, self.team)
-        ls = []
-        captures = []
-        for p in looped[0]:
-            env = m.createEnv()
-            env.move(pos, p)
-            if not env.isvulnerable(env.getKingPos(self.team), self.team):
-                ls.append(p)
-            del env
-        for p in looped[1]:
-            env = m.createEnv()
-            env.move(pos, p)
-            if not env.isvulnerable(env.getKingPos(self.team), self.team):
-                captures.append(p)
-            del env
-
-        return [ls, captures]
+        # TODO: missing castling implementation
 
 
 class Queen(Piece):
@@ -87,20 +82,58 @@ class Queen(Piece):
         dirs = [(0, 1), (1, 0), (0, -1), (-1, 0),
                 (1, 1), (1, -1), (-1, -1), (-1, 1)]
         looped = dirsLoop(dirs, pos, m, self.team)
+        return straightliners(looped, pos, m, self.team)
+
+
+class Rook(Piece):
+    def __init__(self, team):
+        Piece.__init__(self, team)
+
+    # pos is a tuple (x, y)
+    # m is the board
+    def listMoves(self, pos, m):
+        dirs = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+        looped = dirsLoop(dirs, pos, m, self.team)
+        return straightliners(looped, pos, m, self.team)
+
+
+class Bishop(Piece):
+    def __init__(self, team):
+        Piece.__init__(self, team)
+
+    # pos is a tuple (x, y)
+    # m is the board
+    def listMoves(self, pos, m):
+        dirs = [(1, 1), (1, -1), (-1, -1), (-1, 1)]
+        looped = dirsLoop(dirs, pos, m, self.team)
+        return straightliners(looped, pos, m, self.team)
+
+
+class Knight(Piece):
+    def __init__(self, team):
+        Piece.__init__(self, team)
+
+    # pos is a tuple (x, y)
+    # m is the board
+    def listMoves(self, pos, m):
+        dirs = [(2, 1), (1, 2), (-1, 2), (-2, 1),
+                (-2, -1), (-1, -2), (1, -2), (2, -1)]
         ls = []
         captures = []
-        for p in looped[0]:
-            env = m.createEnv()
-            env.move(pos, p)
-            if not env.isvulnerable(env.getKingPos(self.team), self.team):
-                ls.append(p)
-            del env
-        for p in looped[1]:
-            env = m.createEnv()
-            env.move(pos, p)
-            if not env.isvulnerable(env.getKingPos(self.team), self.team):
-                captures.append(p)
-            del env
+        for dir in dirs:
+            p = (dir[0] + pos[0], dir[1] + pos[1])
+            if not m.isoccupied(p):
+                env = m.createEnv()
+                env.move(pos, p)
+                if not env.isvulnerable(env.getKingPos(self.team), self.team):
+                    ls.append(p)
+                del env
+            elif m.iscapturable(p, self.team):
+                env = m.createEnv()
+                env.move(pos, p)
+                if not env.isvulnerable(env.getKingPos(self.team), self.team):
+                    captures.append(p)
+                del env
 
         return [ls, captures]
 
@@ -145,63 +178,3 @@ class Pawn(Piece):
         return [ls, captures]
         # TODO: missing en passant implementation
         # TODO: missing promotion implementation
-
-
-class Knight(Piece):
-    def __init__(self, team):
-        Piece.__init__(self, team)
-
-    # pos is a tuple (x, y)
-    # m is the board
-    def listMoves(self, pos, m):
-        dirs = [(2, 1), (1, 2), (-1, 2), (-2, 1),
-                (-2, -1), (-1, -2), (1, -2), (2, -1)]
-        ls = []
-        captures = []
-        for dir in dirs:
-            p = (dir[0] + pos[0], dir[1] + pos[1])
-            if not m.isoccupied(p):
-                env = m.createEnv()
-                env.move(pos, p)
-                if not env.isvulnerable(env.getKingPos(self.team), self.team):
-                    ls.append(p)
-                del env
-            elif m.iscapturable(p, self.team):
-                env = m.createEnv()
-                env.move(pos, p)
-                if not env.isvulnerable(env.getKingPos(self.team), self.team):
-                    captures.append(p)
-                del env
-
-        return [ls, captures]
-
-
-class King(Piece):
-    def __init__(self, team):
-        Piece.__init__(self, team)
-
-    # pos is a tuple (x, y)
-    # m is the board
-    def listMoves(self, pos, m):
-        dirs = [(0, 1), (1, 0), (0, -1), (-1, 0),
-                (1, 1), (-1, -1), (-1, 1), (1, -1)]
-        ls = []
-        captures = []
-        for dir in dirs:
-            p = (dir[0] + pos[0], dir[1] + pos[1])
-            if m.isinbounds(p):
-                if not m.isoccupied(p):
-                    env = m.createEnv()
-                    env.move(pos, p)
-                    if not env.isvulnerable(p, self.team):
-                        ls.append(p)
-                    del env
-                elif m.iscapturable(p, self.team):
-                    env = m.createEnv()
-                    env.move(pos, p)
-                    if not env.isvulnerable(p, self.team):
-                        captures.append(p)
-                    del env
-
-        return [ls, captures]
-        # TODO: missing castling implementation

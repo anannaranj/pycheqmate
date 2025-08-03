@@ -1,11 +1,9 @@
 import pandas as pd
 import numpy as np
-from py.pieces import King, Queen, Rook, Knight, Bishop, Pawn, dirsLoop
+from py.pieces import King, Queen, Rook, Bishop, Knight, Pawn, dirsLoop
 
 
 class Board():
-    # initial state is just for development ease
-    # it is a string that is the path to the csv
     cmap = None
 
     def __init__(self, hmap):
@@ -22,10 +20,10 @@ class Board():
         self.cmap[self.cmap == "q"] = Queen(False)
         self.cmap[self.cmap == "R"] = Rook(True)
         self.cmap[self.cmap == "r"] = Rook(False)
-        self.cmap[self.cmap == "N"] = Knight(True)
-        self.cmap[self.cmap == "n"] = Knight(False)
         self.cmap[self.cmap == "B"] = Bishop(True)
         self.cmap[self.cmap == "b"] = Bishop(False)
+        self.cmap[self.cmap == "N"] = Knight(True)
+        self.cmap[self.cmap == "n"] = Knight(False)
         self.cmap[self.cmap == "P"] = Pawn(True)
         self.cmap[self.cmap == "p"] = Pawn(False)
 
@@ -113,6 +111,8 @@ class Game():
     lastMovesList = [None, None]
     history = []
 
+    # initial state is just for development ease
+    # it is a string that is the path to the csv
     def __init__(self, initalstate=None):
         if initalstate is None:
             hmap = np.array(pd.read_csv(
