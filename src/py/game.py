@@ -13,19 +13,35 @@ class Board():
 
     # converts it to a computer style data
     def C(self):
-        self.cmap[self.cmap == "."] = None
-        self.cmap[self.cmap == "K"] = King(True)
-        self.cmap[self.cmap == "k"] = King(False)
-        self.cmap[self.cmap == "Q"] = Queen(True)
-        self.cmap[self.cmap == "q"] = Queen(False)
-        self.cmap[self.cmap == "R"] = Rook(True)
-        self.cmap[self.cmap == "r"] = Rook(False)
-        self.cmap[self.cmap == "B"] = Bishop(True)
-        self.cmap[self.cmap == "b"] = Bishop(False)
-        self.cmap[self.cmap == "N"] = Knight(True)
-        self.cmap[self.cmap == "n"] = Knight(False)
-        self.cmap[self.cmap == "P"] = Pawn(True)
-        self.cmap[self.cmap == "p"] = Pawn(False)
+        for y in range(8):
+            for x in range(8):
+                i = self.cmap[(y, x)]
+                if i == ".":
+                    self.cmap[(y, x)] = None
+                if i == "K":
+                    self.cmap[(y, x)] = King(True)
+                if i == "k":
+                    self.cmap[(y, x)] = King(False)
+                if i == "Q":
+                    self.cmap[(y, x)] = Queen(True)
+                if i == "q":
+                    self.cmap[(y, x)] = Queen(False)
+                if i == "R":
+                    self.cmap[(y, x)] = Rook(True)
+                if i == "r":
+                    self.cmap[(y, x)] = Rook(False)
+                if i == "B":
+                    self.cmap[(y, x)] = Bishop(True)
+                if i == "b":
+                    self.cmap[(y, x)] = Bishop(False)
+                if i == "N":
+                    self.cmap[(y, x)] = Knight(True)
+                if i == "n":
+                    self.cmap[(y, x)] = Knight(False)
+                if i == "P":
+                    self.cmap[(y, x)] = Pawn(True)
+                if i == "p":
+                    self.cmap[(y, x)] = Pawn(False)
 
     # f= from
     # t= to
@@ -108,7 +124,7 @@ class Board():
 
 class Game():
     lastClickedPiece = None
-    lastMovesList = [None, None]
+    lastMovesList = [None, None, None]
     history = []
 
     # initial state is just for development ease
@@ -127,3 +143,18 @@ class Game():
                 self.board.cmap[f[::-1]].firstMove = len(self.history)
         self.board.move(f, t)
         self.history.append([f, t])
+
+    def castle(self, type):
+        if type == "O-O":
+            self.board.move((4, 7), (6, 7))
+            self.board.move((7, 7), (5, 7))
+        if type == "o-o":
+            self.board.move((4, 0), (6, 0))
+            self.board.move((7, 0), (5, 0))
+        if type == "O-O-O":
+            self.board.move((4, 7), (2, 7))
+            self.board.move((0, 7), (3, 7))
+        if type == "o-o-o":
+            self.board.move((4, 0), (2, 0))
+            self.board.move((0, 0), (3, 0))
+        self.history.append(type)
