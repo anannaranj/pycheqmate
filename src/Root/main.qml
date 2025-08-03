@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-Window {
+ApplicationWindow {
     id: window
     width: 450
     height: 450
@@ -11,6 +11,7 @@ Window {
     Rectangle {
         height: Math.min(parent.height * 0.8, parent.width * 0.8)
         width: Math.min(parent.height * 0.8, parent.width * 0.8)
+        color: "transparent"
         anchors {
             centerIn: parent
         }
@@ -62,6 +63,7 @@ Window {
         Rectangle {
             height: parent.height * 0.08
             width: parent.width * 0.92
+            color: "transparent"
             anchors {
                 horizontalCenter: parent.horizontalCenter
                 top: board.bottom
@@ -70,7 +72,7 @@ Window {
                 id: freeserif
                 source: "../../assets/freeserif.ttf"
             }
-            Text {
+            Label {
                 id: turn
                 height: parent.height
                 width: parent.width
