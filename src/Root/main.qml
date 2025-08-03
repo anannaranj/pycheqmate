@@ -60,21 +60,26 @@ Window {
             }
         }
         Rectangle {
-            height: parent.height * (1 - 0.115 * 8)
-            width: parent.width
+            height: parent.height * 0.08
+            width: parent.width * 0.92
             anchors {
                 horizontalCenter: parent.horizontalCenter
                 top: board.bottom
             }
+            FontLoader {
+                id: freeserif
+                source: "../../assets/freeserif.ttf"
+            }
             Text {
                 id: turn
+                height: parent.height
+                width: parent.width
                 text: "White's turn"
-                fontSizeMode: Text.Fit
-                minimumPixelSize: 10
-                font.pixelSize: 42
-                anchors {
-                    centerIn: parent
-                }
+                fontSizeMode: Text.VerticalFit
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                font.family: freeserif.font.family
+                font.pixelSize: 999
             }
         }
     }
