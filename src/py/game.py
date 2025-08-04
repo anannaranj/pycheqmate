@@ -132,7 +132,7 @@ class Game():
     def __init__(self, initalstate=None):
         if initalstate is None:
             hmap = np.array(pd.read_csv(
-                "src/csv/default.csv", header=None))
+                "./csv/default.csv", header=None))
         else:
             hmap = np.array(pd.read_csv(initalstate, header=None))
         self.board = Board(hmap)

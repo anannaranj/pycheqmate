@@ -37,7 +37,7 @@ ApplicationWindow {
                     Component {
                         id: img
                         Image {
-                            source: `../../assets/${parent.parent.piece}.png`
+                            source: `../assets/${parent.parent.piece}.png`
                             mipmap: true
                             anchors.centerIn: parent
                         }
@@ -70,7 +70,7 @@ ApplicationWindow {
             }
             FontLoader {
                 id: freeserif
-                source: "../../assets/freeserif.ttf"
+                source: "../assets/freeserif.ttf"
             }
             Label {
                 id: turn
