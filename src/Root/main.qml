@@ -161,8 +161,8 @@ ApplicationWindow {
                 cells.itemAt(index).color = Math.floor(index / 8) & 1 ? index & 1 ? "#ddd" : "#333" : index & 1 ? "#333" : "#ddd";
             }
         }
-        function onSwitchTeam(team) {
-            turn.text = team ? "White's turn" : "Black's turn";
+        function onChangeText(text) {
+            turn.text = text;
         }
         function onPromoteMenu(team) {
             if (team == "True") {

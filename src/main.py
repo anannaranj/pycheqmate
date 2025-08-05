@@ -28,9 +28,37 @@ class Bridge(QObject):
     highlight = Signal(list, arguments=["highlights"])
     captureshighlight = Signal(list, arguments=["captures"])
     highlightreset = Signal()
-    switchTeam = Signal(bool, arguments=["team"])
+    changeText = Signal(str, arguments=["text"])
     promoteMenu = Signal(str, arguments=["team"])
     promoteMenuPos = None
+    game = False
+
+    def handleTurn(self, team):
+        self.changeText.emit("White's turn" if team else "Black's turn")
+        foundMove = False
+        for x in range(8):
+            broken = False
+            for y in range(8):
+                pos = (x, y)
+                if g[0].board.cmap[pos[::-1]] is not None:
+                    if g[0].board.cmap[pos[::-1]].team == team:
+                        if g[0].board.cmap[pos[::-1]].listMoves(pos, g[0].board) != [[], []]:
+                            g[0].board.cmap[
+                                pos[::-1]
+                            ].listMoves(pos, g[0].board)
+                            foundMove = True
+                            broken = True
+                            break
+            if broken:
+                break
+        if not foundMove:
+            if g[0].board.isvulnerable(g[0].board.getKingPos(team), team):
+                self.changeText.emit(
+                    f"{"Black" if team else "White"} Wins: Cheqmate!")
+                self.game = True
+            else:
+                self.changeText.emit("Draw: Stalemate!")
+                self.game = True
 
     @Slot()
     def loadBoard(self):
@@ -42,7 +70,7 @@ class Bridge(QObject):
 
     @Slot(str)
     def handleClick(self, cell):
-        if self.promoteMenuPos:
+        if self.promoteMenuPos or self.game:
             return
         pos = notationToPos(cell)
 
@@ -54,7 +82,7 @@ class Bridge(QObject):
                 self.promoteMenuPos = pos
             self.loadBoard()
             self.highlightreset.emit()
-            self.switchTeam.emit(not g[0].board.cmap[pos[::-1]].team)
+            self.handleTurn(not g[0].board.cmap[pos[::-1]].team)
             g[0].lastMovesList = [None, None, None]
         elif g[0].board.cmap[pos[::-1]] is not None:
             # UNHIGHLIGHTED PIECE
@@ -102,24 +130,24 @@ class Bridge(QObject):
                     self.promoteMenu.emit("True" if x == "P" else "False")
                     self.promoteMenuPos = pos
                 self.loadBoard()
-                self.switchTeam.emit(not g[0].board.cmap[pos[::-1]].team)
+                self.handleTurn(not g[0].board.cmap[pos[::-1]].team)
             elif g[0].lastMovesList[2] is not None:
                 if "O-O" in g[0].lastMovesList[2] and pos == (6, 7):
                     g[0].castle("O-O")
                     self.loadBoard()
-                    self.switchTeam.emit(False)
+                    self.handleTurn(False)
                 if "o-o" in g[0].lastMovesList[2] and pos == (6, 0):
                     g[0].castle("o-o")
                     self.loadBoard()
-                    self.switchTeam.emit(True)
+                    self.handleTurn(True)
                 if "O-O-O" in g[0].lastMovesList[2] and pos == (2, 7):
                     g[0].castle("O-O-O")
                     self.loadBoard()
-                    self.switchTeam.emit(False)
+                    self.handleTurn(False)
                 if "o-o-o" in g[0].lastMovesList[2] and pos == (2, 0):
                     g[0].castle("o-o-o")
                     self.loadBoard()
-                    self.switchTeam.emit(True)
+                    self.handleTurn(True)
             self.highlightreset.emit()
             g[0].lastMovesList = [None, None, None]
 
