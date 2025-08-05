@@ -203,5 +203,3 @@ class Pawn(Piece):
                 del env
 
         return [ls, captures]
-        # TODO: missing en passant implementation
-        # TODO: missing promotion implementation

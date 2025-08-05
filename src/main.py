@@ -76,6 +76,12 @@ class Bridge(QObject):
 
         if g[0].lastMovesList[1] is not None and pos in g[0].lastMovesList[1]:
             # CAPTURES
+            if g[0].board.cmap[pos[::-1]] is None:
+                temp = g[0].board.cmap[(g[0].lastClickedPiece[::-1])]
+                g[0].board.cmap[(
+                    pos[1] + (1 if temp.team else -1), pos[0])] = None
+                g[0].board.hmap[(
+                    pos[1] + (1 if temp.team else -1), pos[0])] = "."
             x = g[0].move(g[0].lastClickedPiece, pos)
             if x is not None:
                 self.promoteMenu.emit("True" if x == "P" else "False")
@@ -100,9 +106,28 @@ class Bridge(QObject):
                         specials.append("o-o")
                     if g[0].board.hmap[(0, 0)] == "r" and g[0].board.hmap[(0, 1)] == "." and g[0].board.hmap[(0, 2)] == "." and g[0].board.hmap[(0, 3)] == "." and g[0].board.cmap[(0, 0)].firstMove is None and not g[0].board.isvulnerable((4, 0), False) and not g[0].board.isvulnerable((3, 0), False) and not g[0].board.isvulnerable((2, 0), False):
                         specials.append("o-o-o")
+
                 moveslist = g[0].board.listMoves(pos)
                 if specials == []:
                     specials = [None]
+                if g[0].board.hmap[pos[::-1]] == "P" and pos[1] == 3:
+                    for x in [1, -1]:
+                        p = (pos[0] + x, 3)
+                        if (g[0].board.isinbounds(p)
+                            and g[0].board.isoccupied(p)
+                            and g[0].board.iscapturable(p, g[0].board.cmap[pos[::-1]].team)
+                            and g[0].board.hmap[p[::-1]] == 'p'
+                                and g[0].board.cmap[p[::-1]].firstMove == len(g[0].history) - 1):
+                            moveslist[1].append((p[0], p[1]-1))
+                if g[0].board.hmap[pos[::-1]] == "p" and pos[1] == 4:
+                    for x in [1, -1]:
+                        p = (pos[0] + x, 4)
+                        if (g[0].board.isinbounds(p)
+                            and g[0].board.isoccupied(p)
+                            and g[0].board.iscapturable(p, g[0].board.cmap[pos[::-1]].team)
+                            and g[0].board.hmap[p[::-1]] == 'P'
+                                and g[0].board.cmap[p[::-1]].firstMove == len(g[0].history) - 1):
+                            moveslist[1].append((p[0], p[1]+1))
                 g[0].lastMovesList = [*moveslist, specials]
                 self.highlightreset.emit()
                 castles = []
