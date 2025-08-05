@@ -12,36 +12,40 @@ class Board():
         self.C()
 
     # converts it to a computer style data
+    def CBackend(self, pos):
+        x, y = pos
+        i = self.cmap[(y, x)]
+        if i == ".":
+            self.cmap[(y, x)] = None
+        if i == "K":
+            self.cmap[(y, x)] = King(True)
+        if i == "k":
+            self.cmap[(y, x)] = King(False)
+        if i == "Q":
+            self.cmap[(y, x)] = Queen(True)
+        if i == "q":
+            self.cmap[(y, x)] = Queen(False)
+        if i == "R":
+            self.cmap[(y, x)] = Rook(True)
+        if i == "r":
+            self.cmap[(y, x)] = Rook(False)
+        if i == "B":
+            self.cmap[(y, x)] = Bishop(True)
+        if i == "b":
+            self.cmap[(y, x)] = Bishop(False)
+        if i == "N":
+            self.cmap[(y, x)] = Knight(True)
+        if i == "n":
+            self.cmap[(y, x)] = Knight(False)
+        if i == "P":
+            self.cmap[(y, x)] = Pawn(True)
+        if i == "p":
+            self.cmap[(y, x)] = Pawn(False)
+
     def C(self):
         for y in range(8):
             for x in range(8):
-                i = self.cmap[(y, x)]
-                if i == ".":
-                    self.cmap[(y, x)] = None
-                if i == "K":
-                    self.cmap[(y, x)] = King(True)
-                if i == "k":
-                    self.cmap[(y, x)] = King(False)
-                if i == "Q":
-                    self.cmap[(y, x)] = Queen(True)
-                if i == "q":
-                    self.cmap[(y, x)] = Queen(False)
-                if i == "R":
-                    self.cmap[(y, x)] = Rook(True)
-                if i == "r":
-                    self.cmap[(y, x)] = Rook(False)
-                if i == "B":
-                    self.cmap[(y, x)] = Bishop(True)
-                if i == "b":
-                    self.cmap[(y, x)] = Bishop(False)
-                if i == "N":
-                    self.cmap[(y, x)] = Knight(True)
-                if i == "n":
-                    self.cmap[(y, x)] = Knight(False)
-                if i == "P":
-                    self.cmap[(y, x)] = Pawn(True)
-                if i == "p":
-                    self.cmap[(y, x)] = Pawn(False)
+                self.CBackend((x, y))
 
     # f= from
     # t= to
@@ -141,8 +145,14 @@ class Game():
         if hasattr(self.board.cmap[f[::-1]], 'firstMove'):
             if self.board.cmap[f[::-1]].firstMove is None:
                 self.board.cmap[f[::-1]].firstMove = len(self.history)
+        promotion = None
+        if t[1] == 0 and self.board.hmap[f[::-1]] == "P":
+            promotion = "P"
+        elif t[1] == 7 and self.board.hmap[f[::-1]] == "p":
+            promotion = "p"
         self.board.move(f, t)
         self.history.append([f, t])
+        return promotion
 
     def castle(self, type):
         if type == "O-O":
@@ -158,3 +168,8 @@ class Game():
             self.board.move((4, 0), (2, 0))
             self.board.move((0, 0), (3, 0))
         self.history.append(type)
+
+    def promote(self, pos, piece):
+        self.board.hmap[pos[::-1]] = piece
+        self.board.cmap[pos[::-1]] = piece
+        self.board.CBackend(pos)

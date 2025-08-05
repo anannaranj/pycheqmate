@@ -73,7 +73,6 @@ class King(Piece):
                     del env
 
         return [ls, captures]
-        # TODO: missing castling implementation
 
 
 class Queen(Piece):

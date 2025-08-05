@@ -26,11 +26,10 @@ ApplicationWindow {
                 id: cells
                 model: 64
                 Rectangle {
-                    required property int index
                     property string piece
                     property string cell
-                    width: parent.parent.width * 0.115
-                    height: parent.parent.height * 0.115
+                    width: parent.parent.width * 1 / 9
+                    height: parent.parent.height * 1 / 9
                     cell: "ABCDEFGH".split('')[index % 8] + (8 - Math.floor(index / 8))
                     // Average Javascript code be like:
                     color: Math.floor(index / 8) & 1 ? index & 1 ? "#ddd" : "#333" : index & 1 ? "#333" : "#ddd"
@@ -61,8 +60,8 @@ ApplicationWindow {
             }
         }
         Rectangle {
-            height: parent.height * 0.08
-            width: parent.width * 0.92
+            height: parent.height * 1 / 9
+            width: parent.width * 8 / 9
             color: "transparent"
             anchors {
                 horizontalCenter: parent.horizontalCenter
@@ -82,6 +81,56 @@ ApplicationWindow {
                 verticalAlignment: Text.AlignVCenter
                 font.family: freeserif.font.family
                 font.pixelSize: 999
+            }
+            Row {
+                id: whitePromoteMenu
+                anchors {
+                    centerIn: parent
+                }
+                height: parent.height
+                width: parent.height * 4
+                Repeater {
+                    model: 4
+                    Image {
+                        property string piece: ["Q", "R", "B", "N"][index]
+                        source: `../assets/${piece}.png`
+                        height: parent.parent.height
+                        width: parent.parent.height
+                        mipmap: true
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: {
+                                bridge.promote(parent.piece);
+                            }
+                        }
+                    }
+                }
+                visible: false
+            }
+            Row {
+                id: blackPromoteMenu
+                anchors {
+                    centerIn: parent
+                }
+                height: parent.height
+                width: parent.height * 4
+                Repeater {
+                    model: 4
+                    Image {
+                        property string piece: ["q", "r", "b", "n"][index]
+                        source: `../assets/${piece}.png`
+                        height: parent.parent.height
+                        width: parent.parent.height
+                        mipmap: true
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: {
+                                bridge.promote(parent.piece);
+                            }
+                        }
+                    }
+                }
+                visible: false
             }
         }
     }
@@ -114,6 +163,19 @@ ApplicationWindow {
         }
         function onSwitchTeam(team) {
             turn.text = team ? "White's turn" : "Black's turn";
+        }
+        function onPromoteMenu(team) {
+            if (team == "True") {
+                whitePromoteMenu.visible = true;
+                turn.visible = false;
+            } else if (team == "False") {
+                blackPromoteMenu.visible = true;
+                turn.visible = false;
+            } else {
+                whitePromoteMenu.visible = false;
+                blackPromoteMenu.visible = false;
+                turn.visible = true;
+            }
         }
     }
 }

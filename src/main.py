@@ -1,3 +1,13 @@
+# nuitka-project: --enable-plugin=pyside6
+# nuitka-project: --enable-plugin=numpy
+# nuitka-project: --include-qt-plugins=qml,
+# nuitka-project: --standalone
+# nuitka-project: --output-dir=../build
+
+# nuitka-project: --include-data-dir={MAIN_DIRECTORY}/Root=Root
+# nuitka-project: --include-data-dir={MAIN_DIRECTORY}/assets=assets
+# nuitka-project: --include-data-dir={MAIN_DIRECTORY}/csv=csv
+
 import sys
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtQml import QQmlApplicationEngine
@@ -19,6 +29,8 @@ class Bridge(QObject):
     captureshighlight = Signal(list, arguments=["captures"])
     highlightreset = Signal()
     switchTeam = Signal(bool, arguments=["team"])
+    promoteMenu = Signal(str, arguments=["team"])
+    promoteMenuPos = None
 
     @Slot()
     def loadBoard(self):
@@ -30,11 +42,16 @@ class Bridge(QObject):
 
     @Slot(str)
     def handleClick(self, cell):
+        if self.promoteMenuPos:
+            return
         pos = notationToPos(cell)
 
         if g[0].lastMovesList[1] is not None and pos in g[0].lastMovesList[1]:
             # CAPTURES
-            g[0].move(g[0].lastClickedPiece, pos)
+            x = g[0].move(g[0].lastClickedPiece, pos)
+            if x is not None:
+                self.promoteMenu.emit("True" if x == "P" else "False")
+                self.promoteMenuPos = pos
             self.loadBoard()
             self.highlightreset.emit()
             self.switchTeam.emit(not g[0].board.cmap[pos[::-1]].team)
@@ -80,7 +97,10 @@ class Bridge(QObject):
         else:
             # NORMAL MOVE
             if g[0].lastMovesList[0] is not None and pos in g[0].lastMovesList[0]:
-                g[0].move(g[0].lastClickedPiece, pos)
+                x = g[0].move(g[0].lastClickedPiece, pos)
+                if x is not None:
+                    self.promoteMenu.emit("True" if x == "P" else "False")
+                    self.promoteMenuPos = pos
                 self.loadBoard()
                 self.switchTeam.emit(not g[0].board.cmap[pos[::-1]].team)
             elif g[0].lastMovesList[2] is not None:
@@ -104,6 +124,13 @@ class Bridge(QObject):
             g[0].lastMovesList = [None, None, None]
 
         g[0].lastClickedPiece = pos
+
+    @Slot(str)
+    def promote(self, piece):
+        g[0].promote(self.promoteMenuPos, piece)
+        self.loadBoard()
+        self.promoteMenu.emit("None")
+        self.promoteMenuPos = None
 
 
 if __name__ == "__main__":
