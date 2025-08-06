@@ -1,4 +1,4 @@
-import pandas as pd
+# import pandas as pd
 import numpy as np
 from py.pieces import King, Queen, Rook, Bishop, Knight, Pawn, dirsLoop
 
@@ -134,11 +134,23 @@ class Game():
     # initial state is just for development ease
     # it is a string that is the path to the csv
     def __init__(self, initalstate=None):
-        if initalstate is None:
-            hmap = np.array(pd.read_csv(
-                "./csv/default.csv", header=None))
-        else:
-            hmap = np.array(pd.read_csv(initalstate, header=None))
+        # if initalstate is None:
+        #     hmap = np.array(pd.read_csv(
+        #         "./csv/default.csv", header=None))
+        # else:
+        #     hmap = np.array(pd.read_csv(initalstate, header=None))
+        default = [x.split(",") for x in [
+            "r,n,b,q,k,b,n,r",
+            "p,p,p,p,p,p,p,p",
+            ".,.,.,.,.,.,.,.",
+            ".,.,.,.,.,.,.,.",
+            ".,.,.,.,.,.,.,.",
+            ".,.,.,.,.,.,.,.",
+            "P,P,P,P,P,P,P,P",
+            "R,N,B,Q,K,B,N,R",
+        ]]
+        # hmap = np.array(pd.read_csv(initalstate, header=None))
+        hmap = np.array(default)
         self.board = Board(hmap)
 
     def move(self, f, t):
