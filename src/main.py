@@ -5,7 +5,6 @@
 
 # nuitka-project: --include-data-dir={MAIN_DIRECTORY}/Root=Root
 # nuitka-project: --include-data-dir={MAIN_DIRECTORY}/assets=assets
-# nuitka-project: --include-data-dir={MAIN_DIRECTORY}/csv=csv
 
 import sys
 from PySide6.QtGui import QGuiApplication
