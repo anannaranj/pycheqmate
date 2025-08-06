@@ -2,12 +2,14 @@
 # nuitka-project: --include-qt-plugins=qml
 # nuitka-project: --onefile
 # nuitka-project: --output-dir=../build
+# nuitka-project: --linux-icon=../logo.png
+# nuitka-project: --windows-icon-from-ico=../logo.png
 
 # nuitka-project: --include-data-dir={MAIN_DIRECTORY}/Root=Root
 # nuitka-project: --include-data-dir={MAIN_DIRECTORY}/assets=assets
 
 import sys
-from PySide6.QtGui import QGuiApplication
+from PySide6.QtGui import QGuiApplication, QIcon
 from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtCore import QUrl, QObject, Signal, Slot
 from pathlib import Path
@@ -186,6 +188,7 @@ class Bridge(QObject):
 
 if __name__ == "__main__":
     app = QGuiApplication(sys.argv)
+    app.setWindowIcon(QIcon("../logo.png"))
     engine = QQmlApplicationEngine()
 
     bridgeObj = Bridge()
