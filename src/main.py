@@ -1,7 +1,6 @@
 # nuitka-project: --enable-plugin=pyside6
-# nuitka-project: --enable-plugin=numpy
 # nuitka-project: --include-qt-plugins=qml
-# nuitka-project: --standalone
+# nuitka-project: --onefile
 # nuitka-project: --output-dir=../build
 
 # nuitka-project: --include-data-dir={MAIN_DIRECTORY}/Root=Root
