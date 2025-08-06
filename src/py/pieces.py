@@ -1,7 +1,4 @@
-import numpy as np
 # the piece class is just the fundamental methods and values for all the 6 pieces
-
-
 class Piece():
     # the team is a boolean, True for white, False for black
     def __init__(self, team):

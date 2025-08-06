@@ -1,5 +1,6 @@
-import pandas as pd
-import numpy as np
+from numpy import array, copy, asarray, where
+from pandas import DataFrame
+# from pandas import DataFrame, read_csv
 from py.pieces import King, Queen, Rook, Bishop, Knight, Pawn, dirsLoop
 
 
@@ -8,7 +9,7 @@ class Board():
 
     def __init__(self, hmap):
         self.hmap = hmap
-        self.cmap = np.copy(self.hmap)
+        self.cmap = copy(self.hmap)
         self.C()
 
     # converts it to a computer style data
@@ -120,10 +121,10 @@ class Board():
         return self.cmap[pos[::-1]].listMoves(pos, self)
 
     def createEnv(self):
-        return Board(np.copy(self.hmap))
+        return Board(copy(self.hmap))
 
     def getKingPos(self, team):
-        return tuple(np.asarray(np.where(self.hmap == ("K" if team else "k"))).T.tolist()[0])[::-1]
+        return tuple(asarray(where(self.hmap == ("K" if team else "k"))).T.tolist()[0])[::-1]
 
 
 class Game():
@@ -149,8 +150,8 @@ class Game():
             "P,P,P,P,P,P,P,P",
             "R,N,B,Q,K,B,N,R",
         ]]
-        # hmap = np.array(pd.read_csv(initalstate, header=None))
-        hmap = np.array(pd.DataFrame(default))
+        # hmap = array(read_csv(initalstate, header=None))
+        hmap = array(DataFrame(default))
         self.board = Board(hmap)
 
     def move(self, f, t):
