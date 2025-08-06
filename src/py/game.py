@@ -1,4 +1,4 @@
-# import pandas as pd
+import pandas as pd
 import numpy as np
 from py.pieces import King, Queen, Rook, Bishop, Knight, Pawn, dirsLoop
 
@@ -150,7 +150,7 @@ class Game():
             "R,N,B,Q,K,B,N,R",
         ]]
         # hmap = np.array(pd.read_csv(initalstate, header=None))
-        hmap = np.array(default)
+        hmap = np.array(pd.DataFrame(default))
         self.board = Board(hmap)
 
     def move(self, f, t):
