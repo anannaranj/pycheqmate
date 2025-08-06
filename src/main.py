@@ -5,8 +5,8 @@
 # nuitka-project: --linux-icon=../logo.png
 # nuitka-project: --windows-icon-from-ico=../logo.png
 
-# nuitka-project: --include-data-dir={MAIN_DIRECTORY}/Root=Root
-# nuitka-project: --include-data-dir={MAIN_DIRECTORY}/assets=assets
+# nuitka-project: --include-data-dir=./Root=Root
+# nuitka-project: --include-data-dir=./assets=assets
 
 import sys
 from PySide6.QtGui import QGuiApplication, QIcon
