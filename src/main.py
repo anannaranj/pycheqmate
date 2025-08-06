@@ -194,7 +194,7 @@ if __name__ == "__main__":
     bridgeObj = Bridge()
     engine.rootContext().setContextProperty("bridge", bridgeObj)
 
-    engine.load(QUrl(str(Path(__file__).parent) + "/Root/main.qml"))
+    engine.load("./Root/main.qml")
 
     if not engine.rootObjects():
         sys.exit(-1)
