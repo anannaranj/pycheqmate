@@ -12,10 +12,9 @@ import sys
 from PySide6.QtGui import QGuiApplication, QIcon
 from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtCore import QUrl, QObject, Signal, Slot
-from pathlib import Path
 from py.game import Game
-from py.utils import notationToPos, posToNotation
-
+# from py.utils import notationToPos, posToNotation
+from py.utils import notationToPos
 
 g = [None]
 
@@ -194,7 +193,7 @@ if __name__ == "__main__":
     bridgeObj = Bridge()
     engine.rootContext().setContextProperty("bridge", bridgeObj)
 
-    engine.load("./Root/main.qml")
+    engine.load(QUrl("./Root/main.qml"))
 
     if not engine.rootObjects():
         sys.exit(-1)
