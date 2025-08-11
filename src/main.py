@@ -9,6 +9,7 @@
 # nuitka-project: --include-data-dir=assets=assets
 
 import sys
+import os
 from PySide6.QtGui import QGuiApplication, QIcon
 from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtCore import QUrl, QObject, Signal, Slot
@@ -193,7 +194,8 @@ if __name__ == "__main__":
     bridgeObj = Bridge()
     engine.rootContext().setContextProperty("bridge", bridgeObj)
 
-    engine.load(QUrl("./Root/main.qml"))
+    engine.load(QUrl.fromLocalFile(os.path.join(
+        os.path.dirname(__file__), "Root", "main.qml")))
 
     if not engine.rootObjects():
         sys.exit(-1)
