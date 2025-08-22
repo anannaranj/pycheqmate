@@ -34,7 +34,12 @@ class Bridge(QObject):
     game = False
 
     def handleTurn(self, team):
-        self.changeText.emit("White's turn" if team else "Black's turn")
+        x = "White's turn" if team else "Black's turn"
+
+        if g[0].board.isvulnerable(g[0].board.getKingPos(team), team):
+            self.changeText.emit(x + ": Checked")
+        else:
+            self.changeText.emit(x)
         foundMove = False
         for x in range(8):
             broken = False
