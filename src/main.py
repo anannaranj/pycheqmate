@@ -4,20 +4,7 @@
 # nuitka-project: --output-dir=../build
 
 # nuitka-project: --include-data-dir=Root=Root
-# nuitka-project: --include-data-files=./assets/freeserif.ttf=./assets/freeserif.ttf
-# nuitka-project: --include-data-files=./assets/logo.png=./assets/logo.png
-# nuitka-project: --include-data-files=./assets/K.png=./assets/K.png
-# nuitka-project: --include-data-files=./assets/k.png=./assets/k.png
-# nuitka-project: --include-data-files=./assets/Q.png=./assets/Q.png
-# nuitka-project: --include-data-files=./assets/q.png=./assets/q.png
-# nuitka-project: --include-data-files=./assets/R.png=./assets/R.png
-# nuitka-project: --include-data-files=./assets/r.png=./assets/r.png
-# nuitka-project: --include-data-files=./assets/N.png=./assets/N.png
-# nuitka-project: --include-data-files=./assets/n.png=./assets/n.png
-# nuitka-project: --include-data-files=./assets/B.png=./assets/B.png
-# nuitka-project: --include-data-files=./assets/b.png=./assets/b.png
-# nuitka-project: --include-data-files=./assets/P.png=./assets/P.png
-# nuitka-project: --include-data-files=./assets/p.png=./assets/p.png
+# nuitka-project: --include-data-dir=assets=assets
 
 # nuitka-project: --linux-icon=./assets/logo.png
 # nuitka-project: --windows-icon-from-ico=./assets/logo.png

@@ -36,7 +36,7 @@ ApplicationWindow {
                     Component {
                         id: img
                         Image {
-                            source: `../assets/${parent.parent.piece}.png`
+                            source: `../assets/${parent.parent.piece === parent.parent.piece.toUpperCase() ? parent.parent.piece + "w" : parent.parent.piece + "b"}.png`
                             mipmap: true
                             anchors.centerIn: parent
                         }
@@ -93,7 +93,7 @@ ApplicationWindow {
                     model: 4
                     Image {
                         property string piece: ["Q", "R", "B", "N"][index]
-                        source: `../assets/${piece}.png`
+                        source: `../assets/${piece === piece.toUpperCase() ? piece + "w" : piece + "b"}.png`
                         height: parent.parent.height
                         width: parent.parent.height
                         mipmap: true
@@ -118,7 +118,7 @@ ApplicationWindow {
                     model: 4
                     Image {
                         property string piece: ["q", "r", "b", "n"][index]
-                        source: `../assets/${piece}.png`
+                        source: `../assets/${piece === piece.toUpperCase() ? piece + "w" : piece + "b"}.png`
                         height: parent.parent.height
                         width: parent.parent.height
                         mipmap: true
