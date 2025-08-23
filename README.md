@@ -3,7 +3,11 @@
 A (yet another...) chess implementation made using Python and Qt6 
 ![A screenshot](./Screenshot.png)
 
-# Development:
+## Installation
+### if you want to try a stable release of the project:
+Go to the [releases tab](https://github.com/anannaranj/pycheqmate/releases) and install the release you wish
+
+## Development:
 ### if you want to try this from source code:
 1. `git clone https://github.com/anannaranj/pycheqmate`
 1. `cd pycheqmate`
@@ -20,6 +24,6 @@ A (yet another...) chess implementation made using Python and Qt6
 1. `cd src`
 1. run `main.py`
 
-# Building from source:
+## Building from source:
 1. do the same steps 1-6 from the development section
 1. `python -m nuitka main.py`
