@@ -2,11 +2,14 @@
 # nuitka-project: --include-qt-plugins=qml
 # nuitka-project: --standalone
 # nuitka-project: --output-dir=../build
-# nuitka-project: --linux-icon=../logo.png
-# nuitka-project: --windows-icon-from-ico=../logo.png
 
 # nuitka-project: --include-data-dir=Root=Root
 # nuitka-project: --include-data-dir=assets=assets
+
+# nuitka-project: --linux-icon=./assets/logo.png
+# nuitka-project: --windows-icon-from-ico=./assets/logo.png
+# nuitka-project: --windows-console-mode=disable
+
 
 import sys
 import os
@@ -193,7 +196,7 @@ class Bridge(QObject):
 
 if __name__ == "__main__":
     app = QGuiApplication(sys.argv)
-    app.setWindowIcon(QIcon("../logo.png"))
+    app.setWindowIcon(QIcon("./assets/logo.png"))
     engine = QQmlApplicationEngine()
 
     bridgeObj = Bridge()
