@@ -3,7 +3,7 @@
 A (yet another...) chess implementation made using Python and Qt6 
 ![A screenshot](./Screenshot.png)
 
-## Installation
+## Installation:
 ### if you want to try a stable release of the project:
 Go to the [releases tab](https://github.com/anannaranj/pycheqmate/releases) and install the release you wish
 
