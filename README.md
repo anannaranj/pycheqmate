@@ -19,3 +19,7 @@ A (yet another...) chess implementation made using Python and Qt6
 1. `pip install -r requirements.txt --resume-retries 5`
 1. `cd src`
 1. run `main.py`
+
+# Building from source:
+1. do the same steps 1-6 from the development section
+1. `python -m nuitka main.py`
