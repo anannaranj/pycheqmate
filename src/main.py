@@ -1,6 +1,6 @@
 # nuitka-project: --enable-plugin=pyside6
 # nuitka-project: --include-qt-plugins=qml
-# nuitka-project: --onefile
+# nuitka-project: --standalone
 # nuitka-project: --output-dir=../build
 # nuitka-project: --linux-icon=../logo.png
 # nuitka-project: --windows-icon-from-ico=../logo.png
